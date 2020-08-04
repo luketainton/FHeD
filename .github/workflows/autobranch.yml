@@ -1,3 +1,5 @@
+name: Auto-create branches
+
 on:
     issues:
         types: [assigned]
