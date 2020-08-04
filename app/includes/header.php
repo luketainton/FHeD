@@ -27,6 +27,9 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
                 <a class="nav-link <?php if (!is_signed_in()) {echo(' disabled');} ?>" href="/new">New request</a>
                 </li>
                 <li class="nav-item">
