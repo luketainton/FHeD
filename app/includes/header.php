@@ -46,7 +46,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item text-muted" href="#"><?php echo($_SESSION['username']); ?></a>
-                    <a class="dropdown-item" href="<?php echo($_ENV['OIDC_HOST'] . "/account?referrer=<?php echo($_ENV['OIDC_CLIENT_ID']); ?>&referrer_uri=<?php echo(urlencode($_ENV['APP_URL'])); ?>"); ?>">Profile</a>
+                    <a class="dropdown-item" href="<?php echo($_ENV['OIDC_HOST'] . "/account?referrer=" . $_ENV['OIDC_CLIENT_ID'] . "&referrer_uri=" . urlencode($_ENV['APP_URL'])); ?>">Profile</a>
                     <!-- <div class="dropdown-divider"></div> -->
                     <a class="dropdown-item" href="/logout">Log out</a>
                   </div>
