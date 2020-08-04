@@ -67,3 +67,14 @@
         </div>
     </nav>
     </header>
+
+    <section id="alerts">
+      <?php
+        foreach($_SESSION['alerts'] as $alert) {
+          echo("
+          <div class='alert alert-" . $alert['type'] . "' role='alert'>
+            " . $alert['msg'] . "
+          </div>
+        ") }
+      ?>
+    </section>
