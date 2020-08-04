@@ -3,10 +3,6 @@
     require_once __DIR__ . "/../includes/prereqs.php";
     require_once __DIR__ . "/../includes/header.php";
 
-    if (!is_signed_in()) {
-      header('Location: /login');
-    }
-
     // If form submitted, save to database
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
       try {
@@ -69,7 +65,7 @@
 
     <section>
       <div class="card mx-auto" style="width: 50%;">
-        <form action="/new" method="post" enctype="multipart/form-data">
+        <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="title">Title: </label>
             <input type="text" class="form-control" id="title">
