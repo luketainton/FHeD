@@ -44,7 +44,7 @@
         echo("Error running SQL (Add new user): <br>" . $e->getMessage() . "<br>");
       }
 
-      header_remove();
+      header_remove("Location");
       header('Location: /view?rid=' . $tkt_uuid);
     }
 ?>

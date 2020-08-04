@@ -22,6 +22,7 @@ if ($_ENV['OIDC_DISABLE_SSL'] == "true") {
   $oidc->setVerifyPeer(false);
 }
 
+
 // Custom functions
 function oidc_set_vars($sub, $uid, $fname, $lname, $email) {
   $_SESSION['uuid'] = $sub;
@@ -38,4 +39,9 @@ function is_signed_in() {
   } else {
     return false;
   }
+}
+
+function create_alert($type, $msg) {
+  $thisAlert = array($type, $msg);
+  array_push($_SESSION['alerts'], $thisAlert);
 }
