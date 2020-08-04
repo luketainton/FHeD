@@ -75,6 +75,6 @@
           <div class='alert alert-" . $alert['type'] . "' role='alert'>
             " . $alert['msg'] . "
           </div>
-        ") }
+        "); }
       ?>
     </section>
