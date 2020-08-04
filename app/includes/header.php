@@ -45,7 +45,8 @@
                     <?php echo($_SESSION['full_name']); ?>
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/profile">Profile</a>
+                    <a class="dropdown-item text-muted" href="#"><?php echo($_SESSION['username']); ?></a>
+                    <a class="dropdown-item" href="<?php echo($_ENV['OIDC_HOST'] . "/account"); ?>">Profile</a>
                     <!-- <div class="dropdown-divider"></div> -->
                     <a class="dropdown-item" href="/logout">Log out</a>
                   </div>
