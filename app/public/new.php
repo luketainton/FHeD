@@ -40,8 +40,7 @@
         }
       }
 
-      header_remove("Location");
-      header('Location: /view?rid=' . $tkt_uuid);
+      header('Location: /view?rid=' . $tkt_uuid, true);
     }
 
     if (!is_signed_in()) {
@@ -58,14 +57,14 @@
     <?php
       if(isset($new_ticket_alert)) {
         echo("
-        <section>
+        <div class='container'>
           <div class='alert alert-" . $new_ticket_alert[0] . " alert-dismissible fade show' role='alert'>
             " . $new_ticket_alert[1] . "
             <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
               <span aria-hidden='true'>&times;</span>
             </button>
           </div>
-        </section>
+        </div>
       ");
       unset($new_ticket_alert);
       }
