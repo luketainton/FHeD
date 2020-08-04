@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#563d7c">
     <?php
-      if (!is_logged_in()) {
+      if (!is_signed_in()) {
         echo("<meta http-equiv='refresh' content='0; url=" . $_ENV['APP_URL'] . "/login' />");
       }
     ?>
