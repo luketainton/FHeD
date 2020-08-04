@@ -14,7 +14,7 @@
         $sql->execute();
       } catch (PDOException $e) {
         // echo("Error: <br>" . $e->getMessage() . "<br>");
-        create_alert("danger", "SQL Error: " . $e->getMessage());
+        $new_ticket_alert = array("danger", "SQL Error: " . $e->getMessage());
       }
 
         // Get ticket UUID
@@ -28,7 +28,7 @@
           $tkt_uuid = $tkt_result['uuid'];
         } catch (PDOException $e) {
           // echo("Error: <br>" . $e->getMessage() . "<br>");
-          create_alert("danger", "SQL Error: " . $e->getMessage());
+          $new_ticket_alert = array("danger", "SQL Error: " . $e->getMessage());
         }
 
         // If file is uploaded, process that
@@ -47,7 +47,7 @@
             $sql->execute();
           } catch (PDOException $e) {
             // echo("Error: <br>" . $e->getMessage() . "<br>");
-            create_alert("danger", "SQL Error: " . $e->getMessage());
+            $new_ticket_alert = array("danger", "SQL Error: " . $e->getMessage());
           }
         }
 
@@ -61,6 +61,17 @@
 
 <!-- Begin page content -->
 <main role="main" class="flex-shrink-0">
+
+  <section>
+    <?php
+      if(isset($new_ticket_alert)) {
+        echo("
+        <div class='alert alert-" . $new_ticket_alert[0] . "' role='alert'>
+          " . $new_ticket_alert[1] . "
+        </div>
+      "); }
+    ?>
+  </section>
 
   <section class="jumbotron text-center">
     <div class="container">
