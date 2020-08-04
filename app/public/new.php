@@ -1,59 +1,51 @@
 <?php
     $PAGE_NAME = "New request";
     require_once __DIR__ . "/../includes/header.php";
+    use Ramsey\Uuid\Uuid;
 
     // If form submitted, save to database
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
       try {
         // Process ticket data
-        $stmt = "INSERT INTO tickets (title, description, created_by) VALUES (:title, :description, :user)";
+        $tkt_uuid = Uuid::uuid4()->toString();
+        $stmt = "INSERT INTO tickets (uuid, title, description, created_by) VALUES (:tktuuid, :title, :description, :user)";
         $sql = $db->prepare($stmt);
+        $sql->bindParam(':tktuuid', $tkt_uuid);
         $sql->bindParam(':title', $_POST['title']);
         $sql->bindParam(':description', $_POST['description']);
         $sql->bindParam(':user', $_SESSION['uuid']);
         $sql->execute();
       } catch (PDOException $e) {
         // echo("Error: <br>" . $e->getMessage() . "<br>");
-        $new_ticket_alert = array("danger", "SQL Error: " . $e->getMessage());
+        $new_ticket_alert = array("danger", "Failed to save request: " . $e->getMessage());
       }
 
-        // Get ticket UUID
+      // If file is uploaded, process that
+      if(isset($_FILES['file']) && $_FILES['file']['name'] != "") {
         try {
-          $tkt_stmt = "SELECT uuid FROM tickets WHERE created_by=:uuid AND created_on > date_sub(now(), interval 1 minute)";
-          $tkt_sql = $db->prepare($tkt_stmt);
-          $tkt_sql->bindParam(':uuid', $_SESSION['uuid']);
-          $tkt_sql->execute();
-          $tkt_sql->setFetchMode(PDO::FETCH_ASSOC);
-          $tkt_result = $tkt_sql->fetchAll()[0];
-          $tkt_uuid = $tkt_result['uuid'];
+          $file_name = $_FILES['file']['name'];
+          $file_size = $_FILES['file']['size'];
+          $file_type = $_FILES['file']['type'];
+          $file_tmp = $_FILES['file']['tmp_name'];
+          move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
+          $stmt = "INSERT INTO ticket_uploads (ticket, user, filename) VALUES (:ticket, :user, :name)";
+          $sql = $db->prepare($stmt);
+          $sql->bindParam(':ticket', $tkt_uuid);
+          $sql->bindParam(':user', $_SESSION['uuid']);
+          $sql->bindParam(':name', $file_name);
+          $sql->execute();
         } catch (PDOException $e) {
           // echo("Error: <br>" . $e->getMessage() . "<br>");
-          $new_ticket_alert = array("danger", "SQL Error: " . $e->getMessage());
+          $new_ticket_alert = array("danger", "Failed to upload file: " . $e->getMessage());
         }
-
-        // If file is uploaded, process that
-        if(isset($_FILES['file'])) {
-          try {
-            $file_name = $_FILES['file']['name'];
-            $file_size =$_FILES['file']['size'];
-            $file_type=$_FILES['file']['type'];
-            $file_tmp =$_FILES['file']['tmp_name'];
-            move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
-            $stmt = "INSERT INTO ticket_uploads (ticket, user, path) VALUES (:ticket, :user, :filepath)";
-            $sql = $db->prepare($stmt);
-            $sql->bindParam(':ticket', $tkt_uuid);
-            $sql->bindParam(':user', $_SESSION['uuid']);
-            $sql->bindParam(':filepath', "/srv/attachments/".$file_name);
-            $sql->execute();
-          } catch (PDOException $e) {
-            // echo("Error: <br>" . $e->getMessage() . "<br>");
-            $new_ticket_alert = array("danger", "SQL Error: " . $e->getMessage());
-          }
-        }
-
+      }
 
       header_remove("Location");
       header('Location: /view?rid=' . $tkt_uuid);
+    }
+
+    if (!is_signed_in()) {
+      $new_ticket_alert = array("danger", "You need to log in to access this page.");
     }
 ?>
 
@@ -66,21 +58,29 @@
     <?php
       if(isset($new_ticket_alert)) {
         echo("
-        <div class='alert alert-" . $new_ticket_alert[0] . "' role='alert'>
-          " . $new_ticket_alert[1] . "
-        </div>
-      "); }
+        <section>
+          <div class='alert alert-" . $new_ticket_alert[0] . " alert-dismissible fade show' role='alert'>
+            " . $new_ticket_alert[1] . "
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>
+        </section>
+      ");
+      unset($new_ticket_alert);
+      }
     ?>
   </section>
 
-  <section class="jumbotron text-center">
-    <div class="container">
-      <h1>Create a new request</h1>
-      <p class="lead text-muted">
-        Fill in the form below to create a new request. We'll respond to it as soon as we can.
-      </p>
-    </div>
-  </section>
+  <?php if (is_signed_in()) { ?>
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1>Create a new request</h1>
+        <p class="lead text-muted">
+          Fill in the form below to create a new request. We'll respond to it as soon as we can.
+        </p>
+      </div>
+    </section>
 
     <section>
       <div class="card mx-auto" style="width: 50%;">
@@ -101,6 +101,7 @@
         </form>
       </div>
     </section>
+  <?php } ?>
 
 </main>
 
