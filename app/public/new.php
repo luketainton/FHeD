@@ -12,6 +12,10 @@
         $sql->bindParam(':description', $_POST['description']);
         $sql->bindParam(':user', $_SESSION['uuid']);
         $sql->execute();
+      } catch (PDOException $e) {
+        // echo("Error: <br>" . $e->getMessage() . "<br>");
+        create_alert("danger", "SQL Error: " . $e->getMessage());
+      }
 
         // Get ticket UUID
         try {
@@ -23,26 +27,30 @@
           $tkt_result = $tkt_sql->fetchAll()[0];
           $tkt_uuid = $tkt_result['uuid'];
         } catch (PDOException $e) {
-          echo("Error: " . $e->getMessage());
+          // echo("Error: <br>" . $e->getMessage() . "<br>");
+          create_alert("danger", "SQL Error: " . $e->getMessage());
         }
 
         // If file is uploaded, process that
         if(isset($_FILES['file'])) {
-          $file_name = $_FILES['file']['name'];
-          $file_size =$_FILES['file']['size'];
-          $file_type=$_FILES['file']['type'];
-          $file_tmp =$_FILES['file']['tmp_name'];
-          move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
-          $stmt = "INSERT INTO ticket_uploads (ticket, user, path) VALUES (:ticket, :user, :filepath)";
-          $sql = $db->prepare($stmt);
-          $sql->bindParam(':ticket', $tkt_uuid);
-          $sql->bindParam(':user', $_SESSION['uuid']);
-          $sql->bindParam(':filepath', "/srv/attachments/".$file_name);
-          $sql->execute();
+          try {
+            $file_name = $_FILES['file']['name'];
+            $file_size =$_FILES['file']['size'];
+            $file_type=$_FILES['file']['type'];
+            $file_tmp =$_FILES['file']['tmp_name'];
+            move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
+            $stmt = "INSERT INTO ticket_uploads (ticket, user, path) VALUES (:ticket, :user, :filepath)";
+            $sql = $db->prepare($stmt);
+            $sql->bindParam(':ticket', $tkt_uuid);
+            $sql->bindParam(':user', $_SESSION['uuid']);
+            $sql->bindParam(':filepath', "/srv/attachments/".$file_name);
+            $sql->execute();
+          } catch (PDOException $e) {
+            // echo("Error: <br>" . $e->getMessage() . "<br>");
+            create_alert("danger", "SQL Error: " . $e->getMessage());
+          }
         }
-      } catch (PDOException $e) {
-        echo("Error running SQL (Add new user): <br>" . $e->getMessage() . "<br>");
-      }
+
 
       header_remove("Location");
       header('Location: /view?rid=' . $tkt_uuid);
@@ -68,11 +76,11 @@
         <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="title">Title: </label>
-            <input type="text" class="form-control" id="title">
+            <input type="text" class="form-control" id="title" name="title">
           </div>
           <div class="form-group">
             <label for="description">Description: </label>
-            <textarea type="text" class="form-control" id="description" rows="3"></textarea>
+            <textarea type="text" class="form-control" id="description" name="description" rows="3"></textarea>
           </div>
           <div class="form-group">
             <label for="file">Upload file(s): </label>
