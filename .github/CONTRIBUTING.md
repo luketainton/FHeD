@@ -6,7 +6,7 @@ First off, thank you for considering contributing to FHeD!
 
 ### Project philosophy
 
-Project philosophy goes here
+We wanted to create a simple, easy to use, free helpdesk system without all of the extra bells and whistles that some individuals and small companies may not require.
 
 ### Roadmap
 
@@ -37,7 +37,7 @@ feel free to open an issue to present your idea.
 
 The general process to submit a contribution is as follow:
 1. Create your own fork of the code
-2. Do the changes in your fork
-3. Make sure to fill the [pull request description](https://github.com/luketainton/FHeD/blob/master/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md) properly.
+2. Make you changes in a new branch in your fork (not main)
+3. Make sure to fill the [pull request](https://github.com/luketainton/FHeD/blob/master/.github/PULL_REQUEST_TEMPLATE/pull_request_template.md) properly.
 
 ### Happy coding :metal:
