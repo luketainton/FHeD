@@ -15,4 +15,3 @@ Fixes # (issue)
 - [ ] I read & comply with the [contributing guidelines](https://github.com/luketainton/FHeD/blob/master/CONTRIBUTING.md)
 - [ ] I have tested my code for new features & regressions on both mobile & desktop devices, using the latest version of major browsers.
 - [ ] I have made corresponding changes the documentation (README.md).
-- [ ] I've check my modifications for any breaking change, especially in the `config.yml` file
