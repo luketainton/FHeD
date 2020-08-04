@@ -2,10 +2,6 @@
     $PAGE_NAME = "Open requests";
     require_once __DIR__ . "/../includes/prereqs.php";
     require_once __DIR__ . "/../includes/header.php";
-
-    if (!is_signed_in()) {
-      header('Location: /login');
-    }
 ?>
 
 
