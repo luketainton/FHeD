@@ -45,6 +45,7 @@
       }
 
       header('Location: /view?rid=' . $tkt_uuid);
+      exit();
     }
 ?>
 
