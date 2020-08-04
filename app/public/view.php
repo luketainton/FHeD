@@ -15,6 +15,18 @@
       echo("Error: " . $e->getMessage());
     }
 
+    // Get ticket updates
+    try {
+      $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
+      $updates_sql = $db->prepare($updates_stmt);
+      $updates_sql->bindParam(':uuid', $_GET['rid']);
+      $updates_sql->execute();
+      $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
+      $updates_result = $updates_sql->fetchAll();
+    } catch (PDOException $e) {
+      echo("Error: " . $e->getMessage());
+    }
+
     // Get authorised subscribers
     try {
       $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
@@ -47,11 +59,13 @@
 
   <?php if (!is_signed_in()) { ?>
     <section>
-      <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-        You need to log in to access this page.
-        <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
-          <span aria-hidden='true'>&times;</span>
-        </button>
+      <div class="container">
+        <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+          You need to log in to access this page.
+          <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+            <span aria-hidden='true'>&times;</span>
+          </button>
+        </div>
       </div>
     </section>
   <?php } else {
@@ -61,46 +75,118 @@
           <h1><?php echo($request['title']); ?></h1>
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
-          <div class="container">
-            <div class="row">
-              <div class="col-sm">
-                <div class="card mx-auto">
-                  <div class="card-header"><span class="mdi mdi-information-outline"></span> Information</div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;"><b>Status:</b> <?php echo($request['status']); ?></span>
-                        </div>
+        </div>
+      </section>
+      <section>
+        <div class="container">
+          <div class="row">
+            <div class="col-sm">
+              <div class="card mx-auto">
+                <div class="card-header"><span class="mdi mdi-information-outline"></span> Information</div>
+                <ul class="list-group list-group-flush">
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <span style="display: inline;"><b>Status:</b></span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo($request['status']); ?></span>
                       </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="col-sm">
-                <div class="card mx-auto">
-                  <div class="card-header"><span class="mdi mdi-update"></span> Updates</div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <div class="col-10">
-                            <span style="display: inline;" class="text-muted">#<?php echo(sprintf("%'.05d\n", $tkt["id"])); ?> </span><span><b><?php echo($tkt['title']); ?></b></span>
-                            <p class="m-0"><?php echo($tkt['description']); ?></p>
-                          </div>
-                          <div class="col-2">
-                            <a class="btn btn-success float-right" href="view?rid=<?php echo($tkt["uuid"]); ?>" role="button">Go</a>
-                          </div>
-                        </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <span style="display: inline;"><b>Creator:</b></span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo(get_user_name($db, $request['created_by'])); ?></span>
                       </div>
-                    </li>
-                  </ul>
-                </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <span style="display: inline;"><b>Assignee:</b></span>
+                        <?php if ($request['assignee'] != null) {
+                          echo("<span style='display: inline; margin-left: 1%;'>" . get_user_name($db, $request['assignee']) . "</span>");
+                        } else {
+                          echo("<span class='text-muted' style='display: inline; margin-left: 1%;'>None</span>");
+                        } ?>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <span style="display: inline;"><b>Created:</b></span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo($request['created_on']); ?></span>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <span style="display: inline;"><b>Updated:</b></span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo($request['last_updated']); ?></span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
+
+            <div class="col-sm">
+              <div class="card mx-auto">
+                <div class="card-header"><span class="mdi mdi-update"></span> Updates</div>
+                <ul class="list-group list-group-flush">
+                  <?php
+                    if (count($updates_result) == 0) {
+                      echo("<center><b>No updates</b></center>");
+                    } else {
+                      foreach($updates_result as $update) {
+                  ?>
+                    <li class="list-group-item">
+                      <div class="container">
+                        <div class="row">
+                          <span style="display: inline;"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span><span class="text-muted"><i><?php echo(" " . $update['created']); ?></i></span>
+                        </div>
+                        <div class="row">
+                          <span><?php echo($update['msg']); ?></span>
+                        </div>
+                      </div>
+                    </li>
+                  <?php } } ?>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-sm">
+              <div class="card mx-auto">
+                <div class="card-header"><span class="mdi mdi-comment-edit-outline"></span> Actions</div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                      <div class="container">
+                        <div class="row">
+                          <span style="display: inline;">Post an update</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="container">
+                        <div class="row">
+                          <span style="display: inline;">Upload file(s)</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="list-group-item">
+                      <div class="container">
+                        <div class="row">
+                          <span style="display: inline;">Manage request subscribers</span>
+                        </div>
+                      </div>
+                    </li>
+                </ul>
+              </div>
+            </div>
+
           </div>
-          <p><?php print_r($request); ?></p>
         </div>
       </section>
     <?php } else if ($is_authorised == false) { ?>
