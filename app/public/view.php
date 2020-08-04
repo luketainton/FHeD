@@ -1,6 +1,5 @@
 <?php
     $PAGE_NAME = "View Request";
-    require_once __DIR__ . "/../includes/prereqs.php";
     require_once __DIR__ . "/../includes/header.php";
 
     // Get ticket
