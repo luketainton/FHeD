@@ -1,0 +1,13 @@
+name: Greetings
+
+on: [pull_request, issues]
+
+jobs:
+  greeting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/first-interaction@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        issue-message: 'Welcome! Thank you for opening your first issue on FHeD. Please see the [contributing guidelines](https://github.com/luketainton/FHeD/blob/main/.github/CONTRIBUTING.md) for more information.'
+        pr-message: 'Thank you for opening your first pull request on FHeD! Please see the [contributing guidelines](https://github.com/luketainton/FHeD/blob/main/.github/CONTRIBUTING.md) to ensure your PR is ready for merge.'
