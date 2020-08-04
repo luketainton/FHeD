@@ -46,7 +46,7 @@
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item text-muted" href="#"><?php echo($_SESSION['username']); ?></a>
-                    <a class="dropdown-item" href="<?php echo($_ENV['OIDC_HOST'] . "/account"); ?>">Profile</a>
+                    <a class="dropdown-item" href="<?php echo($_ENV['OIDC_HOST'] . "/account?referrer=fhed_test&referrer_uri=https%3A%2F%2Ffhed.tainton.uk"); ?>">Profile</a>
                     <!-- <div class="dropdown-divider"></div> -->
                     <a class="dropdown-item" href="/logout">Log out</a>
                   </div>
