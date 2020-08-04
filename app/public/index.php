@@ -30,6 +30,36 @@
 
       $user_tickets_sub = 0; // Force 'no subbed tickets' msg until the code works
     }
+
+    function get_sub_ticket($db, $ticket_uuid) {
+      try {
+        $stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
+        $sql = $db->prepare($stmt);
+        $sql->bindParam(':uuid', $ticket_uuid);
+        $sql->execute();
+        $sql->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $sql->fetchAll();
+        $tkt = $result[0];
+      } catch (PDOException $e) {
+        echo("Error: " . $e->getMessage());
+      }
+      return $tkt;
+    }
+
+    function get_user_name($db, $user_uuid) {
+      try {
+        $stmt = "SELECT given_name, family_name FROM users WHERE uuid=:uuid";
+        $sql = $db->prepare($stmt);
+        $sql->bindParam(':uuid', $user_uuid);
+        $sql->execute();
+        $sql->setFetchMode(PDO::FETCH_ASSOC);
+        $result = $sql->fetchAll();
+        $usr = $result[0]['given_name'] . " " . $result[0]['family_name'];
+      } catch (PDOException $e) {
+        echo("Error: " . $e->getMessage());
+      }
+      return $usr;
+    }
 ?>
 
 
@@ -99,17 +129,19 @@
         </div>
         <ul class="list-group list-group-flush">
           <?php
-            if ($user_tickets_sub == 0) {
-            // if (count($sub_tickets_result) == 0) {
+            // if ($user_tickets_sub == 0) {
+            if (count($sub_tickets_result) == 0) {
               echo("<center><b>No subscribed tickets</b></center>");
             } else {
-              foreach($sub_tickets_result as $tkt) {
+              foreach($sub_tickets_result as $sub) {
+                $tkt = get_sub_ticket($db, $sub['ticket_uuid']);
+                $tkt_creator = get_user_name($db, $tkt['created_by']);
           ?>
           <li class="list-group-item">
             <div class="container">
               <div class="row">
                 <div class="col-10">
-                  <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $tkt["id"]); ?> </span><span><b><?php echo($tkt['title']); ?></b></span>
+                  <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $tkt["id"]); ?> </span><span><b><?php echo($tkt['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . $tkt_creator . ")"); ?></span>
                   <p class="m-0"><?php echo($tkt['description']); ?></p>
                 </div>
                 <div class="col-2">
