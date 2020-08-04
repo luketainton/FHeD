@@ -1,6 +1,5 @@
 <?php
     $PAGE_NAME = "New request";
-    require_once __DIR__ . "/../includes/prereqs.php";
     require_once __DIR__ . "/../includes/header.php";
 
     // If form submitted, save to database
