@@ -1,5 +1,5 @@
 <?php
-    $PAGE_NAME = "Open requests";
+    $PAGE_NAME = "Existing requests";
     require_once __DIR__ . "/../includes/header.php";
 ?>
 
