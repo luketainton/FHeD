@@ -1,6 +1,5 @@
 <?php
     $PAGE_NAME = "Home";
-    require_once __DIR__ . "/../includes/prereqs.php";
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
@@ -27,8 +26,6 @@
       } catch (PDOException $e) {
         echo("Error: " . $e->getMessage());
       }
-
-      $user_tickets_sub = 0; // Force 'no subbed tickets' msg until the code works
     }
 
     function get_sub_ticket($db, $ticket_uuid) {
@@ -46,20 +43,6 @@
       return $tkt;
     }
 
-    function get_user_name($db, $user_uuid) {
-      try {
-        $stmt = "SELECT given_name, family_name FROM users WHERE uuid=:uuid";
-        $sql = $db->prepare($stmt);
-        $sql->bindParam(':uuid', $user_uuid);
-        $sql->execute();
-        $sql->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $sql->fetchAll();
-        $usr = $result[0]['given_name'] . " " . $result[0]['family_name'];
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
-      return $usr;
-    }
 ?>
 
 
@@ -76,84 +59,84 @@
         ?>
         is the one-stop shop for all of your IT-related needs. Let us know how we can help you by opening a request.
       </p>
-      <p>
-        <?php
-          if (is_signed_in()) {
-            echo("
-              <a href='/new' class='btn btn-primary my-2'>Create a request</a>
-              <a href='/open' class='btn btn-secondary my-2'>View existing requests</a>
-            ");
-          } else {
-            echo("<b>Please log in to create or view tickets.</b>");
-          }
-        ?>
-      </p>
+      <?php if (is_signed_in()) { ?>
+        <p>
+          <a href='/new' class='btn btn-primary my-2'>Create a request</a>
+          <a href='/open' class='btn btn-secondary my-2'>View existing requests</a>
+        </p>
+      <?php } else { ?>
+        <p><b>Please log in to create or view requests.</b></p>
+      <?php } ?>
     </div>
   </section>
 
   <?php if (is_signed_in()) { ?>
-    <section>
-      <div class="card mx-auto" style="width: 80%;">
-        <div class="card-header">
-          <span class="mdi mdi-ticket-outline"></span> My Open Requests
-        </div>
-        <ul class="list-group list-group-flush">
-          <?php
-            if (count($user_tickets_result) == 0) {
-              echo("<center><b>No open tickets</b></center>");
-            } else {
-              foreach($user_tickets_result as $tkt) {
-          ?>
-          <li class="list-group-item">
-            <div class="container">
-              <div class="row">
-                <div class="col-10">
-                  <span style="display: inline;" class="text-muted">#<?php echo(sprintf("%'.05d\n", $tkt["id"])); ?> </span><span><b><?php echo($tkt['title']); ?></b></span>
-                  <p class="m-0"><?php echo($tkt['description']); ?></p>
-                </div>
-                <div class="col-2">
-                  <a class="btn btn-success float-right" href="view?rid=<?php echo($tkt["uuid"]); ?>" role="button">Go</a>
-                </div>
-              </div>
+    <div class="container" style="margin-top: -5%">
+      <div class="row">
+        <div class="col-sm">
+          <div class="card mx-auto">
+            <div class="card-header">
+              <span class="mdi mdi-ticket-outline"></span> My Open Requests
             </div>
-          </li>
-          <?php } } ?>
-        </ul>
-      </div>
-    </section>
+            <ul class="list-group list-group-flush">
+              <?php
+                if (count($user_tickets_result) == 0) {
+                  echo("<center><b>No open tickets</b></center>");
+                } else {
+                  foreach($user_tickets_result as $tkt) {
+              ?>
+              <li class="list-group-item">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-10">
+                      <span style="display: inline;" class="text-muted">#<?php echo(sprintf("%'.05d\n", $tkt["id"])); ?> </span><span><b><?php echo($tkt['title']); ?></b></span>
+                      <p class="m-0"><?php echo($tkt['description']); ?></p>
+                    </div>
+                    <div class="col-2">
+                      <a class="btn btn-success float-right" href="view?rid=<?php echo($tkt["uuid"]); ?>" role="button">Go</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <?php } } ?>
+            </ul>
+          </div>
+        </div>
 
-    <section style="margin-top: 1%;">
-      <div class="card mx-auto" style="width: 80%;">
-        <div class="card-header">
-          <span class="mdi mdi-rss"></span> My Subscribed Requests
-        </div>
-        <ul class="list-group list-group-flush">
-          <?php
-            // if ($user_tickets_sub == 0) {
-            if (count($sub_tickets_result) == 0) {
-              echo("<center><b>No subscribed tickets</b></center>");
-            } else {
-              foreach($sub_tickets_result as $sub) {
-                $tkt = get_sub_ticket($db, $sub['ticket_uuid']);
-                $tkt_creator = get_user_name($db, $tkt['created_by']);
-          ?>
-          <li class="list-group-item">
-            <div class="container">
-              <div class="row">
-                <div class="col-10">
-                  <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $tkt["id"]); ?> </span><span><b><?php echo($tkt['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . $tkt_creator . ")"); ?></span>
-                  <p class="m-0"><?php echo($tkt['description']); ?></p>
-                </div>
-                <div class="col-2">
-                  <a class="btn btn-success float-right" href="view?rid=<?php echo($tkt["uuid"]); ?>" role="button">Go</a>
-                </div>
-              </div>
+        <div class="col-sm">
+          <div class="card mx-auto">
+            <div class="card-header">
+              <span class="mdi mdi-rss"></span> My Subscribed Requests
             </div>
-          </li>
-          <?php } } ?>
-        </ul>
+            <ul class="list-group list-group-flush">
+              <?php
+                if (count($sub_tickets_result) == 0) {
+                  echo("<center><b>No subscribed tickets</b></center>");
+                } else {
+                  foreach($sub_tickets_result as $sub) {
+                    $tkt = get_sub_ticket($db, $sub['ticket_uuid']);
+                    $tkt_creator = get_user_name($db, $tkt['created_by']);
+              ?>
+              <li class="list-group-item">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-10">
+                      <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $tkt["id"]); ?> </span><span><b><?php echo($tkt['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . $tkt_creator . ")"); ?></span>
+                      <p class="m-0"><?php echo($tkt['description']); ?></p>
+                    </div>
+                    <div class="col-2">
+                      <a class="btn btn-success float-right" href="view?rid=<?php echo($tkt["uuid"]); ?>" role="button">Go</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <?php } } ?>
+            </ul>
+          </div>
+        </section>
+        </div>
       </div>
-    </section>
+    </div>
   <?php } ?>
 
 </main>
