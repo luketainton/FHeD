@@ -1,4 +1,5 @@
 <?php
+    require_once __DIR__ . "/prereqs.php";
     $PAGE_TITLE = $PAGE_NAME . " :: " . $_ENV['APP_NAME'];
 ?>
 
