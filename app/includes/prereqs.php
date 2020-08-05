@@ -7,6 +7,19 @@ require_once __DIR__ . "/../vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
 $dotenv->load();
 
+// Database auto-generation
+if (file_exists("/../includes/install.php")) {
+  return;
+  add_action('run_db_populate')
+}
+
+function run_db_populate() {
+    // all my glorious one-time-magic.
+    include( "/../includes/install.php" );
+   // after all execution rename your file;
+   rename( "/../includes/install.php", "/../includes/install-backup.php");
+}
+
 // Session
 session_start();
 
