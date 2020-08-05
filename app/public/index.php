@@ -13,7 +13,8 @@
         $user_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
         $user_tickets_result = $user_tickets_sql->fetchAll();
       } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
+        Sentry\captureException($e);
+        // echo("Error: " . $e->getMessage());
       }
 
       // Get tickets user has subscribed to
@@ -25,7 +26,8 @@
         $sub_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
         $sub_tickets_result = $sub_tickets_sql->fetchAll();
       } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
+        Sentry\captureException($e);
+        // echo("Error: " . $e->getMessage());
       }
 
       $user_tickets_sub = 0; // Force 'no subbed tickets' msg until the code works
@@ -41,7 +43,8 @@
         $result = $sql->fetchAll();
         $tkt = $result[0];
       } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
+        Sentry\captureException($e);
+        // echo("Error: " . $e->getMessage());
       }
       return $tkt;
     }
@@ -56,7 +59,8 @@
         $result = $sql->fetchAll();
         $usr = $result[0]['given_name'] . " " . $result[0]['family_name'];
       } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
+        Sentry\captureException($e);
+        // echo("Error: " . $e->getMessage());
       }
       return $usr;
     }
