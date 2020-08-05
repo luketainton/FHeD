@@ -33,7 +33,7 @@
                 <a class="nav-link <?php if (!is_signed_in()) {echo(' disabled');} ?>" href="/new">New request</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link <?php if (!is_signed_in()) {echo(' disabled');} ?>" href="/open">Existing requests</a>
+                <a class="nav-link <?php if (!is_signed_in()) {echo(' disabled');} ?>" href="/existing">Existing requests</a>
                 </li>
             </ul>
         <div class="mt-2 mt-md-0">
