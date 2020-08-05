@@ -10,7 +10,7 @@ $dotenv->load();
 // Database auto-generation
 if (file_exists("/../includes/install.php")) {
   return;
-  add_action('run_db_populate')
+  add_action('run_db_populate');
 }
 
 function run_db_populate() {
