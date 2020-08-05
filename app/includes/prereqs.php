@@ -7,6 +7,12 @@ require_once __DIR__ . "/../vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
 $dotenv->load();
 
+// GlitchTip Logs
+Sentry\init([
+  'dsn' => 'https://06f1b7e10e04409686f8ddad61f218ec@logs.tainton.uk/2',
+  'release' => $_ENV['APP_VERSION']
+]);
+
 // Session
 session_start();
 
