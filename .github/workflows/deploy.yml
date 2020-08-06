@@ -1,0 +1,24 @@
+name: Deploy
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: Build image
+      run: docker build . --file Dockerfile --tag luketainton/fhed:latest
+    - name: Push image
+      run: docker push luketainton/fhed:latest
+    - name: Update image on server
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: cd /docker/active/fhed && docker-compose pull && docker-compose up -d
+        host: ${{ secrets.SSH_HOST }}
+        port: ${{ secrets.SSH_PORT }}
+        username: ${{ secrets.SSH_USERNAME }}
+        privateKey: ${{ secrets.SSH_SSHKEY }}
