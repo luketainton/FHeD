@@ -2,8 +2,8 @@ mode: auto
 silent: false
 branchName: short
 branches:
-  - label: feature
+  - label: type/feature
     prefix: feature/
-  - label: bug
+  - label: type/bug
     prefix: bug/
 autoCloseIssue: true
