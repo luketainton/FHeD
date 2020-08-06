@@ -1,3 +1,3 @@
-![Image of FHeD Logo](https://octodex.github.com/images/yaktocat.png)
+![Image of FHeD Logo](https://github.com/luketainton/FHeD/raw/new-logo/logo.png)
 # FHeD
 FreeHelpDesk
