@@ -62,7 +62,7 @@
       <?php if (is_signed_in()) { ?>
         <p>
           <a href='/new' class='btn btn-primary my-2'>Create a request</a>
-          <a href='/open' class='btn btn-secondary my-2'>View existing requests</a>
+          <a href='/existing' class='btn btn-secondary my-2'>View existing requests</a>
         </p>
       <?php } else { ?>
         <p><b>Please log in to create or view requests.</b></p>
