@@ -1,5 +1,5 @@
 <?php
-    $PAGE_NAME = "Update Request";
+    $PAGE_NAME = "Upload File";
     require_once __DIR__ . "/../includes/header.php";
 
     // Get ticket
@@ -193,8 +193,8 @@
         <div class="card mx-auto" style="width: 50%;;margin-bottom: 50px;">
           <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
             <div class="form-group">
-              <label for="description">Update: </label>
-              <textarea type="text" class="form-control" id="description" name="description" rows="3"></textarea>
+              <label for="file">Upload file(s): </label>
+              <input type="file" class="form-control-file" id="file" name="file">
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
