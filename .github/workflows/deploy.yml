@@ -26,7 +26,7 @@ jobs:
     - name: Build image for GitHub Package Registry
       run: docker build . --file Dockerfile --tag docker.pkg.github.com/luketainton/fhed/fhed:latest
     - name: Push image to GitHub Package Registry
-      run: docker push docker.pkg.github.com/luketainton/FHeD/fhed:latest
+      run: docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
 
   deploy:
     name: Update Docker image on server
