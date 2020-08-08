@@ -95,7 +95,7 @@
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Creator:</b></span>
+                        <span style="display: inline;"><b>Created by:</b></span>
                         <span style="display: inline; margin-left: 1%;"><?php echo(get_user_name($db, $request['created_by'])); ?></span>
                       </div>
                     </div>
@@ -103,7 +103,7 @@
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Assignee:</b></span>
+                        <span style="display: inline;"><b>Assigned to:</b></span>
                         <?php if ($request['assignee'] != null) {
                           echo("<span style='display: inline; margin-left: 1%;'>" . get_user_name($db, $request['assignee']) . "</span>");
                         } else {
@@ -123,7 +123,7 @@
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Updated:</b></span>
+                        <span style="display: inline;"><b>Last updated:</b></span>
                         <span style="display: inline; margin-left: 1%;"><?php echo($request['last_updated']); ?></span>
                       </div>
                     </div>
@@ -164,7 +164,7 @@
                     <li class="list-group-item">
                       <div class="container">
                         <div class="row">
-                          <span style="display: inline;">Post an update</span>
+                          <span style="display: inline;">Send an update</span>
                         </div>
                       </div>
                     </li>
@@ -178,7 +178,7 @@
                     <li class="list-group-item">
                       <div class="container">
                         <div class="row">
-                          <span style="display: inline;">Manage request subscribers</span>
+                          <span style="display: inline;">Add/Remove ticket subscribers</span>
                         </div>
                       </div>
                     </li>
