@@ -22,13 +22,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Login to DockerHub Registry
-      run: echo ${{ secrets.GITHUB_TOKEN }} | https://docker.pkg.github.com -u luketainton --password-stdin
+      run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u luketainton --password-stdin
     - name: Build image for GitHub Package Registry
       run: docker build . --file Dockerfile --tag docker.pkg.github.com/luketainton/FHeD/fhed:latest
     - name: Push image to GitHub Package Registry
       run: docker push docker.pkg.github.com/luketainton/FHeD/fhed:latest
 
   deploy:
+    name: Update Docker image on server
     runs-on: ubuntu-latest
     needs: [docker-dh]
     steps:
