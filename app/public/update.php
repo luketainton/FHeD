@@ -1,5 +1,5 @@
 <?php
-    $PAGE_NAME = "View Request";
+    $PAGE_NAME = "Update Request";
     require_once __DIR__ . "/../includes/header.php";
 
     // Get ticket
@@ -182,18 +182,22 @@
                         </div>
                       </div>
                     </li>
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;"><a href="view?rid=<?php echo($tkt["uuid"]); ?>" >Close ticket</a></span>
-                        </div>
-                      </div>
-                    </li>
                 </ul>
               </div>
             </div>
 
           </div>
+        </div>
+      </section>
+      <section>
+        <div class="card mx-auto" style="width: 50%;;margin-bottom: 50px;">
+          <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <label for="description">Update: </label>
+              <textarea type="text" class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
       </section>
     <?php } else if ($is_authorised == false) { ?>

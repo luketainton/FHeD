@@ -77,7 +77,7 @@
     </section>
 
       <section>
-        <div class="card mx-auto" style="width: 80%;">
+        <div class="card mx-auto" style="width: 80%;;margin-bottom: 50px;">
           <div class="card-header">
             <span class="mdi mdi-ticket-outline"></span> My Closed Requests
           </div>
