@@ -4,16 +4,31 @@ on:
     branches: main
 
 jobs:
-  deploy:
+  docker-dh:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-    - name: Build image
+    - name: Build image for Docker Hub
       run: docker build . --file Dockerfile --tag luketainton/fhed:latest
-    - name: Push image
+    - name: Push image to Docker Hub
       run: docker push luketainton/fhed:latest
+      
+  docker-ghr:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Login to DockerHub Registry
+      run: echo ${{ secrets.GITHUB_TOKEN }} | https://docker.pkg.github.com -u luketainton --password-stdin
+    - name: Build image for GitHub Package Registry
+      run: docker build . --file Dockerfile --tag docker.pkg.github.com/luketainton/FHeD/fhed:latest
+    - name: Push image to GitHub Package Registry
+      run: docker push docker.pkg.github.com/luketainton/FHeD/fhed:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
     - name: Update image on server
       uses: garygrossgarten/github-action-ssh@release
       with:
