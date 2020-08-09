@@ -28,12 +28,12 @@
           } catch (PDOException $e) {
             $new_ticket_alert = array("danger", "Failed to upload file: " . $e->getMessage());
           }
-          $newURL = "/view?rid=$request['uuid']";
+          $newURL = "/view?rid=" . $request['uuid'];
           echo("<script>window.location = '$newURL'</script>");
         }
       } else {
         $alert = array("danger", "You are not authorised to update this request.");
-        $newURL = "/view?rid=$request['uuid']";
+        $newURL = "/view?rid=" . $request['uuid'];
         echo("<script>window.location = '$newURL'</script>");
       }
     }

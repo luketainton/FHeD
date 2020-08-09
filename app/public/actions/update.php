@@ -26,7 +26,7 @@
       }
     }
 
-    $newURL = "/view?rid=$request['uuid']";
+    $newURL = "/view?rid=" . $request['uuid'];
     echo("<script>window.location = '$newURL'</script>");
 
 ?>

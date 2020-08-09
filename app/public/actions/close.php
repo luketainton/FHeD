@@ -23,7 +23,7 @@
         echo("<script>window.location = '$newURL'</script>");
     } else {
         $alert = array("danger", "You are not authorised to close this request.");
-        $newURL = "/view?rid=$request['uuid']";
+        $newURL = "/view?rid=" . $request['uuid'];
         echo("<script>window.location = '$newURL'</script>");
     }
 
