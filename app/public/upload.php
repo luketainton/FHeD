@@ -75,12 +75,17 @@
           <h1><?php echo($request['title']); ?></h1>
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
+          <p>
+            <a href='/update?rid=<?php echo($tkt["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
+            <a href='/upload?rid=<?php echo($tkt["uuid"]); ?>' class='btn btn-secondary my-2'>Add attachment(s)</a>
+            <a href='/close?rid=<?php echo($tkt["uuid"]); ?>' class='btn btn-danger my-2'>Close the request</a>
+          </p>
         </div>
       </section>
       <section>
         <div class="container">
           <div class="row">
-            <div class="col-sm">
+            <div class="col-4">
               <div class="card mx-auto">
                 <div class="card-header"><span class="mdi mdi-information-outline"></span> Information</div>
                 <ul class="list-group list-group-flush">
@@ -132,7 +137,7 @@
               </div>
             </div>
 
-            <div class="col-sm">
+            <div class="col-8">
               <div class="card mx-auto">
                 <div class="card-header"><span class="mdi mdi-update"></span> Updates</div>
                 <ul class="list-group list-group-flush">
@@ -157,40 +162,11 @@
               </div>
             </div>
 
-            <div class="col-sm">
-              <div class="card mx-auto">
-                <div class="card-header"><span class="mdi mdi-comment-edit-outline"></span> Actions</div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;"><a href="update?rid=<?php echo($tkt["uuid"]); ?>" >Send an update</a></span>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;"><a href="upload?rid=<?php echo($tkt["uuid"]); ?>" >Upload file(s)</a></span>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;">Add/Remove ticket subscribers</span>
-                        </div>
-                      </div>
-                    </li>
-                </ul>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
       <section>
-        <div class="card mx-auto" style="width: 50%;;margin-bottom: 50px;">
+        <div class="card mx-auto" style="width: 50%;margin-bottom: 50px;">
           <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
             <div class="form-group">
               <label for="file">Upload file(s): </label>
