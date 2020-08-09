@@ -58,17 +58,17 @@
         </div>
       </section>
       <section>
-        <div class="container">
+        <div class="container-fluid">
           <div class="row">
-            <div class="col-4">
-              <div class="card mx-auto" style="margin-bottom:50px;">
+            <div class="col-3">
+              <div class="card mx-auto">
                 <div class="card-header"><span class="mdi mdi-information-outline"></span> Information</div>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
                         <span style="display: inline;"><b>Status:</b></span>
-                        <span style="display: inline; margin-left: 1%;">New</span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo($request['status']); ?></span>
                       </div>
                     </div>
                   </li>
@@ -76,7 +76,7 @@
                     <div class="container">
                       <div class="row">
                         <span style="display: inline;"><b>Created by:</b></span>
-                        <span style="display: inline; margin-left: 1%;">Luke Tainton</span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo(get_user_name($db, $request['created_by'])); ?></span>
                       </div>
                     </div>
                   </li>
@@ -84,14 +84,15 @@
                     <div class="container">
                       <div class="row">
                         <span style="display: inline;"><b>Assigned to:</b></span>
-                        <span class="text-muted" style="display: inline; margin-left: 1%;">None</span>                      </div>
+                        <span class="text-muted" style="display: inline; margin-left: 1%;"><?php echo(get_user_name($db, $request['status']) || "None"); ?></span>
+                      </div>
                     </div>
                   </li>
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
                         <span style="display: inline;"><b>Created:</b></span>
-                        <span style="display: inline; margin-left: 1%;">2020-08-04 13:26:22</span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo($request['created_on']); ?></span>
                       </div>
                     </div>
                   </li>
@@ -99,36 +100,40 @@
                     <div class="container">
                       <div class="row">
                         <span style="display: inline;"><b>Last updated:</b></span>
-                        <span style="display: inline; margin-left: 1%;">2020-08-04 13:26:22</span>
+                        <span style="display: inline; margin-left: 1%;"><?php echo($request['last_updated']); ?></span>
                       </div>
                     </div>
                   </li>
                 </ul>
               </div>
-            <div class="card mx-auto" style="margin-bottom:25px;">
-                <div class="card-header"><span class="mdi mdi-file-document-outline"></span> Uploaded files</div>
-                <ul class="list-group list-group-flush">
-                  <?php
-                    if (count($files) == 0) {
-                      echo("<center><b>No files uploaded</b></center>");
-                    } else {
-                      foreach($files as $file) {
-                  ?>
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;"><b><?php echo(get_user_name($db, $file['user'])); ?></b></span><span class="text-muted"><i> <?php echo(" " . $file['created']); ?></i></span>
-                        </div>
-                        <div class="row">
-                          <span><?php echo($file['path']); ?></span>
-                        </div>
-                      </div>
-                    </li>
-                  <?php } } ?>
-                </ul>
-              </div></div>
+            </div>
 
-            <div class="col-8">
+            <div class="col-3">
+              <div class="card mx-auto">
+                  <div class="card-header"><span class="mdi mdi-file-document-outline"></span> Files</div>
+                  <ul class="list-group list-group-flush">
+                    <?php
+                      if (count($files) == 0) {
+                        echo("<center><b>No files uploaded</b></center>");
+                      } else {
+                        foreach($files as $file) {
+                    ?>
+                      <li class="list-group-item">
+                        <div class="container">
+                          <div class="row">
+                            <span style="display: inline;"><b><?php echo(get_user_name($db, $file['user'])); ?></b></span><span class="text-muted"><i> <?php echo(" " . $file['created']); ?></i></span>
+                          </div>
+                          <div class="row">
+                            <a target="_blank" href="<?php echo('/actions/download?file=' . $file['id']); ?>"><span><?php echo($file['path']); ?></span></a>
+                          </div>
+                        </div>
+                      </li>
+                    <?php } } ?>
+                  </ul>
+                </div>
+              </div>
+
+            <div class="col-6">
               <div class="card mx-auto">
                 <div class="card-header"><span class="mdi mdi-update"></span> Updates</div>
                 <ul class="list-group list-group-flush">

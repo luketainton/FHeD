@@ -17,7 +17,7 @@
             $file_size = $_FILES['file']['size'];
             $file_type = $_FILES['file']['type'];
             $file_tmp = $_FILES['file']['tmp_name'];
-            move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
+            move_uploaded_file($file_tmp,$_ENV['ATTACHMENTS_PATH']."/".$file_uuid);
             $stmt = "INSERT INTO ticket_uploads (id, ticket, user, filename) VALUES (:fileuuid, :ticket, :user, :name)";
             $sql = $db->prepare($stmt);
             $sql->bindParam(':fileuuid', $file_uuid);
