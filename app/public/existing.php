@@ -4,31 +4,19 @@
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
-      // Get user's open tickets
-      try {
-        $user_tickets_stmt = "SELECT uuid, id, title, description, status FROM tickets WHERE created_by=:uuid";
-        $user_tickets_sql = $db->prepare($user_tickets_stmt);
-        $user_tickets_sql->bindParam(':uuid', $_SESSION['uuid']);
-        $user_tickets_sql->execute();
-        $user_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $user_tickets_result = $user_tickets_sql->fetchAll();
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
+      $open_requests = array();
+      $closed_requests = array();
 
-      // Get user's closed tickets
-      try {
-        $closed_tickets_stmt = "SELECT uuid, id, title, description, status FROM tickets WHERE created_by=:uuid AND status='closed'#";
-        $closed_tickets_sql = $db->prepare($user_tickets_stmt);
-        $closed_tickets_sql->bindParam(':uuid', $_SESSION['uuid']);
-        $closed_tickets_sql->execute();
-        $closed_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $closed_tickets_result = $user_tickets_sql->fetchAll();
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
+      $requests = get_my_requests($db);
 
+      foreach($requests as $req) {
+        if ($req['status'] != "Closed") {
+          array_push($open_requests, $req);
+        } elseif ($req['status'] == "Closed") {
+          array_push($closed_requests, $req);
+        }
       }
+    }
 ?>
 
 
@@ -53,10 +41,10 @@
         </div>
         <ul class="list-group list-group-flush">
           <?php
-            if (count($user_tickets_result) == 0) {
+            if (count($open_requests) == 0) {
               echo("<center><b>No open tickets</b></center>");
             } else {
-              foreach($user_tickets_result as $tkt) {
+              foreach($open_requests as $tkt) {
           ?>
           <li class="list-group-item">
             <div class="container">
@@ -83,10 +71,10 @@
           </div>
           <ul class="list-group list-group-flush">
             <?php
-              if (count($closed_tickets_result) == 0) {
+              if (count($closed_requests) == 0) {
                 echo("<center><b>No closed tickets</b></center>");
               } else {
-                foreach($closed_tickets_result as $tkt) {
+                foreach($closed_requests as $tkt) {
             ?>
             <li class="list-group-item">
               <div class="container">

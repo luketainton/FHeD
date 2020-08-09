@@ -2,55 +2,10 @@
     $PAGE_NAME = "Upload file";
     require_once __DIR__ . "/../includes/header.php";
 
-    // Get ticket
-    try {
-      $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
-      $ticket_sql = $db->prepare($ticket_stmt);
-      $ticket_sql->bindParam(':uuid', $_GET['rid']);
-      $ticket_sql->execute();
-      $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $ticket_result = $ticket_sql->fetchAll();
-      $request = $ticket_result[0];
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
-
-    // Get ticket updates
-    try {
-      $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
-      $updates_sql = $db->prepare($updates_stmt);
-      $updates_sql->bindParam(':uuid', $_GET['rid']);
-      $updates_sql->execute();
-      $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $updates_result = $updates_sql->fetchAll();
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
-
-    // Get authorised subscribers
-    try {
-      $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
-      $users_sql = $db->prepare($users_stmt);
-      $users_sql->bindParam(':uuid', $_GET['rid']);
-      $users_sql->execute();
-      $users_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $users_result = $users_sql->fetchAll();
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
-
-
-    $authorised_users = array();
-    foreach($users_result as $user) {
-      array_push($authorised_users, $user['user_uuid']);
-    }
-
-    if (in_array($_SESSION['uuid'], $authorised_users) || $_SESSION['uuid'] == $request['created_by']) {
-      $is_authorised = true;
-    } else {
-      $is_authorised = false;
-    }
-
+    $request = get_request($db, $_GET['rid']);
+    $updates = get_updates($db, $request);
+    $authorised_users = get_subscribers($db, $request);
+    $is_authorised = isAuthorised($authorised_users, $request);
 ?>
 
 
@@ -138,10 +93,10 @@
                 <div class="card-header"><span class="mdi mdi-update"></span> Updates</div>
                 <ul class="list-group list-group-flush">
                   <?php
-                    if (count($updates_result) == 0) {
+                    if (count($updates) == 0) {
                       echo("<center><b>No updates</b></center>");
                     } else {
-                      foreach($updates_result as $update) {
+                      foreach($updates as $update) {
                   ?>
                     <li class="list-group-item">
                       <div class="container">
@@ -170,7 +125,7 @@
                 <div class="card-header"><span class="mdi mdi-cloud-upload-outline"></span> Upload file(s)</div>
                   <form action="/actions/upload" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                      <input type="hidden" id="rid" name="rid" value="b4b3d4cf-d64d-11ea-b64d-0019997c933f">
+                      <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
                     </div>
                     <div class="form-group" style="margin: 2%;">
                       <input type="file" class="form-control-file" id="file" name="file">
