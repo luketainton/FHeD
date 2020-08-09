@@ -24,6 +24,16 @@
     return $ticket_result;
   }
 
+  function get_my_open_requests($db) {
+    $ticket_stmt = "SELECT * FROM tickets WHERE created_by=:uuid AND status = 'Closed'";
+    $ticket_sql = $db->prepare($ticket_stmt);
+    $ticket_sql->bindParam(':uuid', $_SESSION['uuid']);
+    $ticket_sql->execute();
+    $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
+    $ticket_result = $ticket_sql->fetchAll();
+    return $ticket_result;
+  }
+
   function get_subscribed_requests($db) {
       $requests = array();
       $sub_tickets_stmt = "SELECT ticket_uuid FROM ticket_subscribers WHERE user_uuid=:uuid";

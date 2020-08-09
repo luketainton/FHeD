@@ -36,7 +36,7 @@
     <section>
       <div class="card mx-auto" style="width: 80%;margin-bottom: 50px;">
         <div class="card-header">
-          <span class="mdi mdi-ticket-outline"></span> My Open Requests
+          <span class="mdi mdi-ticket-outline"></span> My Requests
         </div>
         <ul class="list-group list-group-flush">
           <?php
