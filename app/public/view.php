@@ -128,7 +128,7 @@
                             <span style="display: inline;"><b><?php echo(get_user_name($db, $file['user'])); ?></b></span><span class="text-muted"><i> <?php echo(" " . $file['created']); ?></i></span>
                           </div>
                           <div class="row">
-                            <a target="_blank" href="<?php echo('/actions/download?file=' . $file['id']); ?>"><span><?php echo($file['path']); ?></span></a>
+                            <a target="_blank" href="<?php echo('/actions/download?file=' . $file['id']); ?>"><span><?php echo($file['filename']); ?></span></a>
                           </div>
                         </div>
                       </li>

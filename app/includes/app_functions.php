@@ -76,10 +76,10 @@
     return $result;
   }
 
-  function get_single_file($db, $file) {
+  function get_single_file($db, $fileid) {
     $stmt = "SELECT * FROM ticket_uploads WHERE id=:fileid";
     $sql = $db->prepare($stmt);
-    $sql->bindParam(':fileid', $file['id']);
+    $sql->bindParam(':fileid', $fileid);
     $sql->execute();
     $sql->setFetchMode(PDO::FETCH_ASSOC);
     $result = $sql->fetchAll();
