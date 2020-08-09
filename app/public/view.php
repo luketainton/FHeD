@@ -13,6 +13,24 @@
 <!-- Begin page content -->
 <main role="main" class="flex-shrink-0">
 
+  <section>
+    <?php
+      if(isset($alert)) {
+        echo("
+        <div class='container'>
+          <div class='alert alert-" . $alert[0] . " alert-dismissible fade show' role='alert'>
+            " . $alert[1] . "
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>
+        </div>
+      ");
+      unset($new_ticket_alert);
+      }
+    ?>
+  </section>
+
   <?php if (!is_signed_in()) { ?>
     <section>
       <div class="container">

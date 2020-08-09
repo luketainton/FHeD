@@ -1,5 +1,5 @@
 <?php
-    require_once __DIR__ . "/../../includes/header.php";
+    require_once __DIR__ . "/../../includes/prereqs.php";
     use Ramsey\Uuid\Uuid;
 
     // If form submitted, save to database

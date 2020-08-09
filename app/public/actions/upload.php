@@ -1,6 +1,7 @@
 <?php
     $PAGE_NAME = "Upload file to request";
-    require_once __DIR__ . "/../../includes/header.php";
+    require_once __DIR__ . "/../../includes/prereqs.php";
+    use Ramsey\Uuid\Uuid;
 
     $request = get_request($db, $_POST['rid']);
     $authorised_users = get_subscribers($db, $request);
@@ -27,11 +28,13 @@
           } catch (PDOException $e) {
             $new_ticket_alert = array("danger", "Failed to upload file: " . $e->getMessage());
           }
-          header('Location: /view?rid=' . $request['uuid'], true);
+          $newURL = "/view?rid=$request['uuid']";
+          echo("<script>window.location = '$newURL'</script>");
         }
       } else {
-        $new_ticket_alert = array("danger", "You are not authorised to update this request.");
-        header('Location: /view?rid=' . $request['uuid'], true);
+        $alert = array("danger", "You are not authorised to update this request.");
+        $newURL = "/view?rid=$request['uuid']";
+        echo("<script>window.location = '$newURL'</script>");
       }
     }
 

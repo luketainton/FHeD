@@ -1,6 +1,6 @@
 <?php
     $PAGE_NAME = "Update request";
-    require_once __DIR__ . "/../../includes/header.php";
+    require_once __DIR__ . "/../../includes/prereqs.php";
 
     $request = get_request($db, $_POST['rid']);
     $authorised_users = get_subscribers($db, $request);
@@ -17,13 +17,16 @@
           $sql->bindParam(':user', $_SESSION['uuid']);
           $sql->bindParam(':msg', $_POST['msg']);
           $sql->execute();
+          $alert = array("success", "Update saved successfully.");
         } catch (PDOException $e) {
-          $new_ticket_alert = array("danger", "Failed to save update: " . $e->getMessage());
+          $alert = array("danger", "Failed to save update: " . $e->getMessage());
         }
       } else {
-        $new_ticket_alert = array("danger", "You are not authorised to update this request.");
-        header('Location: /view?rid=' . $request['uuid'], true);
+        $alert = array("danger", "You are not authorised to update this request.");
       }
     }
+
+    $newURL = "/view?rid=$request['uuid']";
+    echo("<script>window.location = '$newURL'</script>");
 
 ?>

@@ -1,6 +1,5 @@
 <?php
     $PAGE_NAME = "Existing requests";
-    require_once __DIR__ . "/../includes/prereqs.php";
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
