@@ -178,7 +178,7 @@
                     <li class="list-group-item">
                       <div class="container">
                         <div class="row">
-                          <span style="display: inline;">Add/Remove ticket subscribers</span>
+                          <span style="display: inline;">Add/Remove request subscribers</span>
                         </div>
                       </div>
                     </li>
