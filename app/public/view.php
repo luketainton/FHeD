@@ -84,7 +84,11 @@
                     <div class="container">
                       <div class="row">
                         <span style="display: inline;"><b>Assigned to:</b></span>
-                        <span class="text-muted" style="display: inline; margin-left: 1%;"><?php echo(get_user_name($db, $request['status']) || "None"); ?></span>
+                        <?php if ($request['assignee'] != null) {
+                          echo("<span style='display: inline; margin-left: 1%;'>" . get_user_name($db, $request['assignee']) . "</span>");
+                        } else {
+                          echo("<span class='text-muted' style='display: inline; margin-left: 1%;'>None</span>");
+                        } ?>
                       </div>
                     </div>
                   </li>
