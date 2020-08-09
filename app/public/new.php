@@ -82,7 +82,7 @@
     </section>
 
     <section>
-      <div class="card mx-auto" style="width: 50%;">
+      <div class="card mx-auto" style="width: 50%;margin-bottom: 50px;">
         <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="title">Title: </label>
