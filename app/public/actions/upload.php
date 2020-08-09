@@ -4,7 +4,7 @@
 
     $request = get_request($db, $_POST['rid']);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = isAuthorised($authorised_users, $request);
+    $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
 
     // If form submitted, save to database
     if($_SERVER['REQUEST_METHOD'] == 'POST') {

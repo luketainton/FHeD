@@ -5,7 +5,7 @@
     $request = get_request($db, $_GET['rid']);
     $updates = get_updates($db, $request);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = isAuthorised($authorised_users, $request);
+    $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
 ?>
 
 

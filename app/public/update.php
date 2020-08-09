@@ -1,11 +1,11 @@
 <?php
     $PAGE_NAME = "Update Request";
     require_once __DIR__ . "/../includes/header.php";
-    
+
     $request = get_request($db, $_GET['rid']);
     $updates = get_updates($db, $request);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = isAuthorised($authorised_users, $request);
+    $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
 ?>
 
 
@@ -138,7 +138,7 @@
           </div>
         </div>
       </section>
-      
+
     <?php } else if ($is_authorised == false) { ?>
       <section class="jumbotron text-center">
         <div class="container">

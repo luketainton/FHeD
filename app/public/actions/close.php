@@ -4,8 +4,8 @@
 
     $request = get_request($db, $_GET['rid']);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = isAuthorised($authorised_users, $request);
-    
+    $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
+
     // Close request
     if ($is_authorised == true) {
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
