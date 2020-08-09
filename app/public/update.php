@@ -2,42 +2,60 @@
     $PAGE_NAME = "Update Request";
     require_once __DIR__ . "/../includes/header.php";
 
-    // Get ticket
-    try {
-      $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
-      $ticket_sql = $db->prepare($ticket_stmt);
-      $ticket_sql->bindParam(':uuid', $_GET['rid']);
-      $ticket_sql->execute();
-      $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $ticket_result = $ticket_sql->fetchAll();
-      $request = $ticket_result[0];
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
+    // If form submitted, save to database
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+      try {
+        // Process ticket data
+        $stmt = "INSERT INTO ticket_updates (ticket, user, msg) VALUES (:tktuuid, :user, :msg)";
+        $sql = $db->prepare($stmt);
+        $sql->bindParam(':tktuuid', $_POST['rid']);
+        $sql->bindParam(':user', $_SESSION['uuid']);
+        $sql->bindParam(':msg', $_POST['msg']);
+        $sql->execute();
+      } catch (PDOException $e) {
+        // echo("Error: <br>" . $e->getMessage() . "<br>");
+        $new_ticket_alert = array("danger", "Failed to save update: " . $e->getMessage());
+      }
+      header('Location: /view?rid=' . $_POST['rid'], true);
+    } else { // Form not yet submitted
+      // Get ticket
+      try {
+        $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
+        $ticket_sql = $db->prepare($ticket_stmt);
+        $ticket_sql->bindParam(':uuid', $_GET['rid']);
+        $ticket_sql->execute();
+        $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
+        $ticket_result = $ticket_sql->fetchAll();
+        $request = $ticket_result[0];
+      } catch (PDOException $e) {
+        $new_ticket_alert = array("danger", "Failed to get request: " . $e->getMessage());
+      }
+
+      // Get ticket updates
+      try {
+        $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
+        $updates_sql = $db->prepare($updates_stmt);
+        $updates_sql->bindParam(':uuid', $_GET['rid']);
+        $updates_sql->execute();
+        $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
+        $updates_result = $updates_sql->fetchAll();
+      } catch (PDOException $e) {
+        $new_ticket_alert = array("danger", "Failed to get updates: " . $e->getMessage());
+      }
+
+      // Get authorised subscribers
+      try {
+        $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
+        $users_sql = $db->prepare($users_stmt);
+        $users_sql->bindParam(':uuid', $_GET['rid']);
+        $users_sql->execute();
+        $users_sql->setFetchMode(PDO::FETCH_ASSOC);
+        $users_result = $users_sql->fetchAll();
+      } catch (PDOException $e) {
+        $new_ticket_alert = array("danger", "Failed to get subscribers: " . $e->getMessage());
+      }
     }
 
-    // Get ticket updates
-    try {
-      $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
-      $updates_sql = $db->prepare($updates_stmt);
-      $updates_sql->bindParam(':uuid', $_GET['rid']);
-      $updates_sql->execute();
-      $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $updates_result = $updates_sql->fetchAll();
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
-
-    // Get authorised subscribers
-    try {
-      $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
-      $users_sql = $db->prepare($users_stmt);
-      $users_sql->bindParam(':uuid', $_GET['rid']);
-      $users_sql->execute();
-      $users_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $users_result = $users_sql->fetchAll();
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
 
     $authorised_users = array();
     foreach($users_result as $user) {
@@ -167,10 +185,13 @@
       </section>
       <section>
         <div class="card mx-auto" style="width: 50%;margin-bottom: 50px;">
-          <form style="padding: 2%" action="/new" method="post" enctype="multipart/form-data">
+          <form style="padding: 2%" action="/update" method="post" enctype="multipart/form-data">
             <div class="form-group">
-              <label for="description">Update: </label>
-              <textarea type="text" class="form-control" id="description" name="description" rows="3"></textarea>
+              <input type="hidden" id="rid" name="rid" value="<?php echo($_GET['rid']); ?>">
+            </div>
+            <div class="form-group">
+              <label for="msg">Update: </label>
+              <textarea type="text" class="form-control" id="msg" name="msg" rows="3"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
           </form>
