@@ -15,7 +15,7 @@
   }
 
   function get_my_open_requests($db) {
-    $ticket_stmt = "SELECT * FROM tickets WHERE created_by=:uuid";
+    $ticket_stmt = "SELECT * FROM tickets WHERE created_by=:uuid" AND status != 'Closed';
     $ticket_sql = $db->prepare($ticket_stmt);
     $ticket_sql->bindParam(':uuid', $_SESSION['uuid']);
     $ticket_sql->execute();
@@ -24,7 +24,7 @@
     return $ticket_result;
   }
 
-  function get_my_requests($db) {
+  function get_my_closed_requests($db) {
     $ticket_stmt = "SELECT * FROM tickets WHERE created_by=:uuid AND status = 'Closed'";
     $ticket_sql = $db->prepare($ticket_stmt);
     $ticket_sql->bindParam(':uuid', $_SESSION['uuid']);
