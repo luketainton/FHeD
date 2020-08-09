@@ -95,7 +95,7 @@ function get_subscribed_requests($db) {
     foreach ($sub_tickets_result as $tkt) {
       $stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
       $sql = $db->prepare($stmt);
-      $sql->bindParam(':uuid', $tkt['uuid']);
+      $sql->bindParam(':uuid', $tkt['ticket_uuid']);
       $sql->execute();
       $sql->setFetchMode(PDO::FETCH_ASSOC);
       $result = $sql->fetchAll();
