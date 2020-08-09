@@ -137,5 +137,5 @@ function get_subscribers($db, $request) {
 }
 
 function isAuthorised($authorised_users, $request) {
-  if (in_array($_SESSION['uuid'], $authorised_users) || $_SESSION['uuid'] == $request['created_by']) { return true; } else { return false; }
+  if (in_array($authorised_users, $_SESSION['uuid']) || $_SESSION['uuid'] == $request['created_by']) { return true; } else { return false; }
 }
