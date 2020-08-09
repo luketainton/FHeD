@@ -10,7 +10,7 @@
     if ($is_authorised == true) {
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
           try {
-              $stmt = "UPDATE tickets SET status='Closed' WHERE uuid=:uuid";
+              $stmt = "UPDATE tickets SET status= 5 WHERE uuid=:uuid";
               $sql = $db->prepare($stmt);
               $sql->bindParam(':uuid', $request['uuid']);
               $sql->execute();
