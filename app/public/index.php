@@ -14,6 +14,24 @@
 <!-- Begin page content -->
 <main role="main" class="flex-shrink-0">
 
+  <section>
+    <?php
+      if(isset($alert)) {
+        echo("
+        <div class='container'>
+          <div class='alert alert-" . $alert[0] . " alert-dismissible fade show' role='alert'>
+            " . $alert[1] . "
+            <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+              <span aria-hidden='true'>&times;</span>
+            </button>
+          </div>
+        </div>
+      ");
+      unset($alert);
+      }
+    ?>
+  </section>
+
   <section class="jumbotron text-center">
     <div class="container">
       <h1>Welcome to <?php echo($_ENV['APP_NAME']); ?></h1>
