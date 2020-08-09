@@ -26,43 +26,43 @@
         }
       }
       header('Location: /view?rid=' . $tkt_uuid, true);
-    } else { // Form not yet submitted
-      // Get ticket
-      try {
-        $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
-        $ticket_sql = $db->prepare($ticket_stmt);
-        $ticket_sql->bindParam(':uuid', $_GET['rid']);
-        $ticket_sql->execute();
-        $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $ticket_result = $ticket_sql->fetchAll();
-        $request = $ticket_result[0];
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
+    }
 
-      // Get ticket updates
-      try {
-        $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
-        $updates_sql = $db->prepare($updates_stmt);
-        $updates_sql->bindParam(':uuid', $_GET['rid']);
-        $updates_sql->execute();
-        $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $updates_result = $updates_sql->fetchAll();
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
+    // Get ticket
+    try {
+      $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
+      $ticket_sql = $db->prepare($ticket_stmt);
+      $ticket_sql->bindParam(':uuid', $_GET['rid']);
+      $ticket_sql->execute();
+      $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
+      $ticket_result = $ticket_sql->fetchAll();
+      $request = $ticket_result[0];
+    } catch (PDOException $e) {
+      echo("Error: " . $e->getMessage());
+    }
 
-      // Get authorised subscribers
-      try {
-        $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
-        $users_sql = $db->prepare($users_stmt);
-        $users_sql->bindParam(':uuid', $_GET['rid']);
-        $users_sql->execute();
-        $users_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $users_result = $users_sql->fetchAll();
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
+    // Get ticket updates
+    try {
+      $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
+      $updates_sql = $db->prepare($updates_stmt);
+      $updates_sql->bindParam(':uuid', $_GET['rid']);
+      $updates_sql->execute();
+      $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
+      $updates_result = $updates_sql->fetchAll();
+    } catch (PDOException $e) {
+      echo("Error: " . $e->getMessage());
+    }
+
+    // Get authorised subscribers
+    try {
+      $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
+      $users_sql = $db->prepare($users_stmt);
+      $users_sql->bindParam(':uuid', $_GET['rid']);
+      $users_sql->execute();
+      $users_sql->setFetchMode(PDO::FETCH_ASSOC);
+      $users_result = $users_sql->fetchAll();
+    } catch (PDOException $e) {
+      echo("Error: " . $e->getMessage());
     }
 
 
