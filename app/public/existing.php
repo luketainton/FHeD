@@ -5,6 +5,7 @@
     if (is_signed_in()) {
       $open_requests = array();
       $closed_requests = array();
+      $subscriptions = get_subscribed_requests($db);
 
       $requests = get_my_requests($db);
 
@@ -90,6 +91,35 @@
             </li>
             <?php } } ?>
           </ul>
+        </div>
+        <div class="col-sm">
+          <div class="card mx-auto" style="width: 80%;;margin-bottom: 50px;">
+            <div class="card-header">
+              <span class="mdi mdi-rss"></span> My Subscribed Requests
+            </div>
+            <ul class="list-group list-group-flush">
+              <?php
+                if (count($subscriptions) == 0) {
+                  echo("<center><b>No subscribed tickets</b></center>");
+                } else {
+                  foreach($subscriptions as $sub) { ?>
+              <li class="list-group-item">
+                <div class="container">
+                  <div class="row">
+                    <div class="col-10">
+                      <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $sub["id"]); ?> </span><span><b><?php echo($sub['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . get_user_name($db, $sub['created_by']) . ")"); ?></span>
+                      <p class="m-0"><?php echo($sub['description']); ?></p>
+                    </div>
+                    <div class="col-2">
+                      <a class="btn btn-success float-right" href="view?rid=<?php echo($sub["uuid"]); ?>" role="button">Go</a>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <?php } } ?>
+            </ul>
+          </div>
+        </section>
         </div>
       </section>
     <?php } else { ?>
