@@ -12,7 +12,7 @@
           try {
               $stmt = "UPDATE tickets SET status='Closed' WHERE uuid=:uuid";
               $sql = $db->prepare($stmt);
-              $sql->bindParam(':uuid', $request['uuid']);
+              $sql->bindParam(':uuid', $_GET['rid']);
               $sql->execute();
           } catch (PDOException $e) {
               $alert = array("danger", "Failed to close request: " . $e->getMessage());
