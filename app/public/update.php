@@ -1,23 +1,6 @@
 <?php
     $PAGE_NAME = "Update Request";
     require_once __DIR__ . "/../includes/header.php";
-
-    // If form submitted, save to database
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-      try {
-        // Process ticket data
-        $stmt = "INSERT INTO ticket_updates (ticket, user, msg) VALUES (:tktuuid, :user, :msg)";
-        $sql = $db->prepare($stmt);
-        $sql->bindParam(':tktuuid', $_POST['rid']);
-        $sql->bindParam(':user', $_SESSION['uuid']);
-        $sql->bindParam(':msg', $_POST['msg']);
-        $sql->execute();
-      } catch (PDOException $e) {
-        // echo("Error: <br>" . $e->getMessage() . "<br>");
-        $new_ticket_alert = array("danger", "Failed to save update: " . $e->getMessage());
-      }
-      header('Location: /view?rid=' . $_POST['rid'], true);
-    }
     
     // Get ticket
     try {
@@ -36,7 +19,7 @@
     try {
       $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
       $updates_sql = $db->prepare($updates_stmt);
-      $updates_sql->bindParam(':uuid', $_GET['rid']);
+      $updates_sql->bindParam(':uuid', $request['uuid']);
       $updates_sql->execute();
       $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
       $updates_result = $updates_sql->fetchAll();
@@ -48,7 +31,7 @@
     try {
       $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
       $users_sql = $db->prepare($users_stmt);
-      $users_sql->bindParam(':uuid', $_GET['rid']);
+      $users_sql->bindParam(':uuid', $request['uuid']);
       $users_sql->execute();
       $users_sql->setFetchMode(PDO::FETCH_ASSOC);
       $users_result = $users_sql->fetchAll();
@@ -185,9 +168,9 @@
             <div class="col-12">
               <div class="card mx-auto">
                 <div class="card-header"><span class="mdi mdi-send-outline"></span> Post update</div>
-                  <form action="/update" method="post" enctype="multipart/form-data">
+                  <form action="/actions/update" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                      <input type="hidden" id="rid" name="rid" value="b4b3d4cf-d64d-11ea-b64d-0019997c933f">
+                      <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
                     </div>
                     <div class="form-group" style="margin: 2%;">
                       <textarea type="text" class="form-control" id="msg" name="msg" rows="3"></textarea>

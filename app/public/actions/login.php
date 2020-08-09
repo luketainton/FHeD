@@ -1,6 +1,6 @@
 <?php
     $PAGE_NAME = "Logging in...";
-    require_once __DIR__ . "/../includes/prereqs.php";
+    require_once __DIR__ . "/../../includes/prereqs.php";
 
     // Perform the OIDC authentication
     try {

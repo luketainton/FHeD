@@ -78,7 +78,7 @@
           <p>
             <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
             <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Add attachment(s)</a>
-            <a href='/close?rid=<?php echo($request["uuid"]); ?>' class='btn btn-danger my-2'>Close the request</a>
+            <a href='/actions/close?rid=<?php echo($request["uuid"]); ?>' class='btn btn-danger my-2'>Close the request</a>
           </p>
         </div>
       </section>
@@ -150,7 +150,7 @@
                     <li class="list-group-item">
                       <div class="container">
                         <div class="row">
-                          <span style="display: inline;"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span><span class="text-muted"><i><?php echo(" " . $update['created']); ?></i></span>
+                          <span style="display: inline;"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span><span class="text-muted"><i> <?php echo(" " . $update['created']); ?></i></span>
                         </div>
                         <div class="row">
                           <span><?php echo($update['msg']); ?></span>

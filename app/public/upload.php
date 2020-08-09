@@ -2,32 +2,6 @@
     $PAGE_NAME = "Upload file";
     require_once __DIR__ . "/../includes/header.php";
 
-    // If form submitted, save to database
-    if($_SERVER['REQUEST_METHOD'] == 'POST') {
-      // If file is uploaded, process that
-      if(isset($_FILES['file']) && $_FILES['file']['name'] != "") {
-        try {
-          $file_uuid = Uuid::uuid4()->toString();
-          $file_name = $_FILES['file']['name'];
-          $file_size = $_FILES['file']['size'];
-          $file_type = $_FILES['file']['type'];
-          $file_tmp = $_FILES['file']['tmp_name'];
-          move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
-          $stmt = "INSERT INTO ticket_uploads (id, ticket, user, filename) VALUES (:fileuuid, :ticket, :user, :name)";
-          $sql = $db->prepare($stmt);
-          $sql->bindParam(':fileuuid', $file_uuid);
-          $sql->bindParam(':ticket', $_POST['rid']);
-          $sql->bindParam(':user', $_SESSION['uuid']);
-          $sql->bindParam(':name', $file_name);
-          $sql->execute();
-        } catch (PDOException $e) {
-          // echo("Error: <br>" . $e->getMessage() . "<br>");
-          $new_ticket_alert = array("danger", "Failed to upload file: " . $e->getMessage());
-        }
-      }
-      header('Location: /view?rid=' . $tkt_uuid, true);
-    }
-
     // Get ticket
     try {
       $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
@@ -102,11 +76,6 @@
           <h1><?php echo($request['title']); ?></h1>
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
-          <p>
-            <a href='/update?rid=<?php echo($tkt["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
-            <a href='/upload?rid=<?php echo($tkt["uuid"]); ?>' class='btn btn-secondary my-2'>Add attachment(s)</a>
-            <a href='/close?rid=<?php echo($tkt["uuid"]); ?>' class='btn btn-danger my-2'>Close the request</a>
-          </p>
         </div>
       </section>
       <section>
@@ -199,7 +168,7 @@
             <div class="col-12">
               <div class="card mx-auto">
                 <div class="card-header"><span class="mdi mdi-cloud-upload-outline"></span> Upload file(s)</div>
-                  <form action="/upload" method="post" enctype="multipart/form-data">
+                  <form action="/actions/upload" method="post" enctype="multipart/form-data">
                     <div class="form-group">
                       <input type="hidden" id="rid" name="rid" value="b4b3d4cf-d64d-11ea-b64d-0019997c933f">
                     </div>
