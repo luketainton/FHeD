@@ -192,20 +192,29 @@
           </div>
         </div>
       </section>
-      <section>
-        <div class="card mx-auto" style="width: 50%;margin-bottom: 50px;">
-          <form style="padding: 2%" action="/upload" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-              <input type="hidden" id="rid" name="rid" value="<?php echo($_GET['rid']); ?>">
+
+      <section style="margin-top: 2%;">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              <div class="card mx-auto">
+                <div class="card-header"><span class="mdi mdi-cloud-upload-outline"></span> Upload file(s)</div>
+                  <form action="/upload" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                      <input type="hidden" id="rid" name="rid" value="b4b3d4cf-d64d-11ea-b64d-0019997c933f">
+                    </div>
+                    <div class="form-group" style="margin: 2%;">
+                      <input type="file" class="form-control-file" id="file" name="file">
+                      <button type="submit" class="btn btn-primary" style="margin-top: 2%;">Submit</button>
+                      <a href="/view?rid=<?php echo($_GET['rid']); ?>" class="btn btn-danger" style="margin-top: 2%;">Cancel</a>
+                    </div>
+                  </form>
+              </div>
             </div>
-            <div class="form-group">
-              <label for="file">Upload file(s): </label>
-              <input type="file" class="form-control-file" id="file" name="file">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+          </div>
         </div>
       </section>
+
     <?php } else if ($is_authorised == false) { ?>
       <section class="jumbotron text-center">
         <div class="container">
