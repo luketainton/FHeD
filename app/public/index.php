@@ -3,7 +3,7 @@
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
-      $requests = get_my_requests($db);
+      $requests = get_my_open_requests($db);
       $subscriptions = get_subscribed_requests($db);
     }
 
