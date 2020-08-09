@@ -1,29 +1,10 @@
 <?php
+    $PAGE_NAME = "Upload file to request";
     require_once __DIR__ . "/../../includes/header.php";
 
-    // Get authorised subscribers
-    try {
-      $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
-      $users_sql = $db->prepare($users_stmt);
-      $users_sql->bindParam(':uuid', $_GET['rid']);
-      $users_sql->execute();
-      $users_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $users_result = $users_sql->fetchAll();
-    } catch (PDOException $e) {
-      $new_ticket_alert = array("danger", "Failed to get subscribers: " . $e->getMessage());
-    }
-
-
-    $authorised_users = array();
-    foreach($users_result as $user) {
-      array_push($authorised_users, $user['user_uuid']);
-    }
-
-    if (in_array($_SESSION['uuid'], $authorised_users) || $_SESSION['uuid'] == $request['created_by']) {
-      $is_authorised = true;
-    } else {
-      $is_authorised = false;
-    }
+    $request = get_request($db, $_POST['rid']);
+    $authorised_users = get_subscribers($db, $request);
+    $is_authorised = isAuthorised($authorised_users, $request);
 
     // If form submitted, save to database
     if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -39,18 +20,18 @@
             $stmt = "INSERT INTO ticket_uploads (id, ticket, user, filename) VALUES (:fileuuid, :ticket, :user, :name)";
             $sql = $db->prepare($stmt);
             $sql->bindParam(':fileuuid', $file_uuid);
-            $sql->bindParam(':ticket', $_POST['rid']);
+            $sql->bindParam(':ticket', $request['uuid']);
             $sql->bindParam(':user', $_SESSION['uuid']);
             $sql->bindParam(':name', $file_name);
             $sql->execute();
           } catch (PDOException $e) {
             $new_ticket_alert = array("danger", "Failed to upload file: " . $e->getMessage());
           }
-          header('Location: /view?rid=' . $_POST['rid'], true);
+          header('Location: /view?rid=' . $request['uuid'], true);
         }
       } else {
         $new_ticket_alert = array("danger", "You are not authorised to update this request.");
-        header('Location: /view?rid=' . $_POST['rid'], true);
+        header('Location: /view?rid=' . $request['uuid'], true);
       }
     }
 

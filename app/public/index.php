@@ -3,44 +3,8 @@
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
-      // Get user's own tickets
-      try {
-        $user_tickets_stmt = "SELECT uuid, id, title, description, status FROM tickets WHERE created_by=:uuid";
-        $user_tickets_sql = $db->prepare($user_tickets_stmt);
-        $user_tickets_sql->bindParam(':uuid', $_SESSION['uuid']);
-        $user_tickets_sql->execute();
-        $user_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $user_tickets_result = $user_tickets_sql->fetchAll();
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
-
-      // Get tickets user has subscribed to
-      try {
-        $sub_tickets_stmt = "SELECT ticket_uuid FROM ticket_subscribers WHERE user_uuid=:uuid";
-        $sub_tickets_sql = $db->prepare($sub_tickets_stmt);
-        $sub_tickets_sql->bindParam(':uuid', $_SESSION['uuid']);
-        $sub_tickets_sql->execute();
-        $sub_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
-        $sub_tickets_result = $sub_tickets_sql->fetchAll();
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
-    }
-
-    function get_sub_ticket($db, $ticket_uuid) {
-      try {
-        $stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
-        $sql = $db->prepare($stmt);
-        $sql->bindParam(':uuid', $ticket_uuid);
-        $sql->execute();
-        $sql->setFetchMode(PDO::FETCH_ASSOC);
-        $result = $sql->fetchAll();
-        $tkt = $result[0];
-      } catch (PDOException $e) {
-        echo("Error: " . $e->getMessage());
-      }
-      return $tkt;
+      $requests = get_my_requests($db);
+      $subscriptions = get_subscribed_requests($db);
     }
 
 ?>
@@ -80,10 +44,10 @@
             </div>
             <ul class="list-group list-group-flush">
               <?php
-                if (count($user_tickets_result) == 0) {
+                if (count($requests) == 0) {
                   echo("<center><b>No open tickets</b></center>");
                 } else {
-                  foreach($user_tickets_result as $tkt) {
+                  foreach($requests as $tkt) {
               ?>
               <li class="list-group-item">
                 <div class="container">
@@ -110,22 +74,19 @@
             </div>
             <ul class="list-group list-group-flush">
               <?php
-                if (count($sub_tickets_result) == 0) {
+                if (count($subscriptions) == 0) {
                   echo("<center><b>No subscribed tickets</b></center>");
                 } else {
-                  foreach($sub_tickets_result as $sub) {
-                    $tkt = get_sub_ticket($db, $sub['ticket_uuid']);
-                    $tkt_creator = get_user_name($db, $tkt['created_by']);
-              ?>
+                  foreach($subscriptions as $sub) { ?>
               <li class="list-group-item">
                 <div class="container">
                   <div class="row">
                     <div class="col-10">
-                      <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $tkt["id"]); ?> </span><span><b><?php echo($tkt['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . $tkt_creator . ")"); ?></span>
-                      <p class="m-0"><?php echo($tkt['description']); ?></p>
+                      <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $sub["id"]); ?> </span><span><b><?php echo($sub['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . get_user_name($db, $sub['created_by']) . ")"); ?></span>
+                      <p class="m-0"><?php echo($sub['description']); ?></p>
                     </div>
                     <div class="col-2">
-                      <a class="btn btn-success float-right" href="view?rid=<?php echo($tkt["uuid"]); ?>" role="button">Go</a>
+                      <a class="btn btn-success float-right" href="view?rid=<?php echo($sub["uuid"]); ?>" role="button">Go</a>
                     </div>
                   </div>
                 </div>
