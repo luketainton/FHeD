@@ -1,43 +1,70 @@
 <?php
-    $PAGE_NAME = "View Request";
+    $PAGE_NAME = "Upload file";
     require_once __DIR__ . "/../includes/header.php";
 
-    // Get ticket
-    try {
-      $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
-      $ticket_sql = $db->prepare($ticket_stmt);
-      $ticket_sql->bindParam(':uuid', $_GET['rid']);
-      $ticket_sql->execute();
-      $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $ticket_result = $ticket_sql->fetchAll();
-      $request = $ticket_result[0];
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
+    // If form submitted, save to database
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+      // If file is uploaded, process that
+      if(isset($_FILES['file']) && $_FILES['file']['name'] != "") {
+        try {
+          $file_uuid = Uuid::uuid4()->toString();
+          $file_name = $_FILES['file']['name'];
+          $file_size = $_FILES['file']['size'];
+          $file_type = $_FILES['file']['type'];
+          $file_tmp = $_FILES['file']['tmp_name'];
+          move_uploaded_file($file_tmp,"/srv/attachments/".$file_name);
+          $stmt = "INSERT INTO ticket_uploads (id, ticket, user, filename) VALUES (:fileuuid, :ticket, :user, :name)";
+          $sql = $db->prepare($stmt);
+          $sql->bindParam(':fileuuid', $file_uuid);
+          $sql->bindParam(':ticket', $_POST['rid']);
+          $sql->bindParam(':user', $_SESSION['uuid']);
+          $sql->bindParam(':name', $file_name);
+          $sql->execute();
+        } catch (PDOException $e) {
+          // echo("Error: <br>" . $e->getMessage() . "<br>");
+          $new_ticket_alert = array("danger", "Failed to upload file: " . $e->getMessage());
+        }
+      }
+      header('Location: /view?rid=' . $tkt_uuid, true);
+    } else { // Form not yet submitted
+      // Get ticket
+      try {
+        $ticket_stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
+        $ticket_sql = $db->prepare($ticket_stmt);
+        $ticket_sql->bindParam(':uuid', $_GET['rid']);
+        $ticket_sql->execute();
+        $ticket_sql->setFetchMode(PDO::FETCH_ASSOC);
+        $ticket_result = $ticket_sql->fetchAll();
+        $request = $ticket_result[0];
+      } catch (PDOException $e) {
+        echo("Error: " . $e->getMessage());
+      }
+
+      // Get ticket updates
+      try {
+        $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
+        $updates_sql = $db->prepare($updates_stmt);
+        $updates_sql->bindParam(':uuid', $_GET['rid']);
+        $updates_sql->execute();
+        $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
+        $updates_result = $updates_sql->fetchAll();
+      } catch (PDOException $e) {
+        echo("Error: " . $e->getMessage());
+      }
+
+      // Get authorised subscribers
+      try {
+        $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
+        $users_sql = $db->prepare($users_stmt);
+        $users_sql->bindParam(':uuid', $_GET['rid']);
+        $users_sql->execute();
+        $users_sql->setFetchMode(PDO::FETCH_ASSOC);
+        $users_result = $users_sql->fetchAll();
+      } catch (PDOException $e) {
+        echo("Error: " . $e->getMessage());
+      }
     }
 
-    // Get ticket updates
-    try {
-      $updates_stmt = "SELECT * FROM ticket_updates WHERE ticket=:uuid";
-      $updates_sql = $db->prepare($updates_stmt);
-      $updates_sql->bindParam(':uuid', $_GET['rid']);
-      $updates_sql->execute();
-      $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $updates_result = $updates_sql->fetchAll();
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
-
-    // Get authorised subscribers
-    try {
-      $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
-      $users_sql = $db->prepare($users_stmt);
-      $users_sql->bindParam(':uuid', $_GET['rid']);
-      $users_sql->execute();
-      $users_sql->setFetchMode(PDO::FETCH_ASSOC);
-      $users_result = $users_sql->fetchAll();
-    } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage());
-    }
 
     $authorised_users = array();
     foreach($users_result as $user) {
@@ -163,6 +190,20 @@
             </div>
 
           </div>
+        </div>
+      </section>
+      <section>
+        <div class="card mx-auto" style="width: 50%;margin-bottom: 50px;">
+          <form style="padding: 2%" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+              <input type="hidden" id="rid" name="rid" value="<?php echo($_GET['rid']); ?>">
+            </div>
+            <div class="form-group">
+              <label for="file">Upload file(s): </label>
+              <input type="file" class="form-control-file" id="file" name="file">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
       </section>
     <?php } else if ($is_authorised == false) { ?>
