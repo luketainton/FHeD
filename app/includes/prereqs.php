@@ -127,13 +127,17 @@ function get_updates($db, $request) {
 }
 
 function get_subscribers($db, $request) {
+  $subs = array();
   $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
   $users_sql = $db->prepare($users_stmt);
   $users_sql->bindParam(':uuid', $request['uuid']);
   $users_sql->execute();
   $users_sql->setFetchMode(PDO::FETCH_ASSOC);
   $users_result = $users_sql->fetchAll();
-  return $users_result;
+  foreach ($users_result as $u) {
+    array_push($subs, $u['user_uuid']);
+  }
+  return $subs;
 }
 
 function isAuthorised($user, $authorised_users, $request) {
