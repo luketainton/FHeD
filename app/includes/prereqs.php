@@ -126,6 +126,16 @@ function get_updates($db, $request) {
   return $updates_result;
 }
 
+function get_files($db, $request) {
+  $updates_stmt = "SELECT * FROM ticket_uploads WHERE ticket=:uuid";
+  $updates_sql = $db->prepare($updates_stmt);
+  $updates_sql->bindParam(':uuid', $request['uuid']);
+  $updates_sql->execute();
+  $updates_sql->setFetchMode(PDO::FETCH_ASSOC);
+  $updates_result = $updates_sql->fetchAll();
+  return $updates_result;
+}
+
 function get_subscribers($db, $request) {
   $subs = array();
   $users_stmt = "SELECT user_uuid FROM ticket_subscribers WHERE ticket_uuid=:uuid";
