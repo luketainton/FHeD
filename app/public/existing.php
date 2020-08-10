@@ -3,14 +3,9 @@
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
-      $closed_requests =  get_my_open_requests($db);
+      $closed_requests =  get_my_closed_requests($db);
       $subscriptions = get_subscribed_requests($db);
-<<<<<<< Updated upstream
-
-      $requests = get_my_requests($db);
-=======
       $open_requests = get_my_open_requests($db);
->>>>>>> Stashed changes
 
       foreach($requests as $req) {
         if ($req['status'] != "Closed") {
