@@ -4,7 +4,11 @@
 
     $request = get_request($db, $_POST['rid']);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = if ($_SESSION['uuid'] == $request['created_by']) {return true} else {return false};
+    if ($_SESSION['uuid'] == $request['created_by']) {
+      $is_authorised = true;
+    } else {
+      $is_authorised = false;
+    };
 
     if (!empty($_POST['delSubSelector'])) {
       $subs_to_remove = implode(",", $_POST['delSubSelector']);
