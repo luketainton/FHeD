@@ -12,4 +12,4 @@ jobs:
       with:
         project: FHeD v1.0
         column: In Progress
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        repo-token: ${{ secrets.AUTO_TOKEN }}
