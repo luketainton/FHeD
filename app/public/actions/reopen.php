@@ -1,5 +1,5 @@
 <?php
-    $PAGE_NAME = "Close request";
+    $PAGE_NAME = "Reopen request";
     require_once __DIR__ . "/../../includes/prereqs.php";
 
     $request = get_request($db, $_GET['rid']);

@@ -51,39 +51,39 @@
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
             <p>
-              <?php if ($_SESSION['uuid'] == $request['created_by']) { ?>
-                <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
-                <?php if ($request['status'] == 'Closed') { ?>
-                <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-success my-2'>Reopen request</a>
-              <?php }} ?>
               <?php if ($request['status'] != 'Closed') { ?>
                 <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
                 <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Add attachment(s)</a>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closeModal">Close the request</button>
+                <?php if ($_SESSION['uuid'] == $request['created_by']) { ?>
+                  <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closeModal">Close the request</button>
+                  <div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="closeModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="closeModalLabel">Close the request?</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to close request <b><?php echo($request['title']); ?></b>? This action is irreversible.
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                          <a href='/actions/close?rid=<?php echo($request["uuid"]); ?>' class='btn btn-danger'>Close request</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <?php } ?>
               <?php } ?>
+              <?php if ($_SESSION['uuid'] == $request['created_by']) { ?>
+                <?php if ($request['status'] == 'Closed') { ?>
+                  <a href='/reopen?rid=<?php echo($request["uuid"]); ?>' class='btn btn-success my-2'>Reopen request</a>
+                <?php }} ?>
             </p>
         </div>
-
-        <div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="closeModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="closeModalLabel">Close the request?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to close request <b><?php echo($request['title']); ?></b>? This action is irreversible.
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <a href='/actions/close?rid=<?php echo($request["uuid"]); ?>' class='btn btn-danger'>Close request</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
       </section>
       <section>
         <div class="container-fluid">
