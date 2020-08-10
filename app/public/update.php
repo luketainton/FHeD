@@ -43,23 +43,23 @@
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Status:</b></span>
-                        <span style="display: inline; margin-left: 1%;"><?php echo($request['status']); ?></span>
+                        <span class="requestinfo"><b>Status:</b></span>
+                        <span class="requestinfo requestinfo-spaced"><?php echo($request['status']); ?></span>
                       </div>
                     </div>
                   </li>
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Created by:</b></span>
-                        <span style="display: inline; margin-left: 1%;"><?php echo(get_user_name($db, $request['created_by'])); ?></span>
+                        <span class="requestinfo"><b>Created by:</b></span>
+                        <span class="requestinfo requestinfo-spaced"><?php echo(get_user_name($db, $request['created_by'])); ?></span>
                       </div>
                     </div>
                   </li>
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Assigned to:</b></span>
+                        <span class="requestinfo"><b>Assigned to:</b></span>
                         <?php if ($request['assignee'] != null) {
                           echo("<span style='display: inline; margin-left: 1%;'>" . get_user_name($db, $request['assignee']) . "</span>");
                         } else {
@@ -71,16 +71,16 @@
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Created:</b></span>
-                        <span style="display: inline; margin-left: 1%;"><?php echo($request['created_on']); ?></span>
+                        <span class="requestinfo"><b>Created:</b></span>
+                        <span class="requestinfo requestinfo-spaced"><?php echo($request['created_on']); ?></span>
                       </div>
                     </div>
                   </li>
                   <li class="list-group-item">
                     <div class="container">
                       <div class="row">
-                        <span style="display: inline;"><b>Last updated:</b></span>
-                        <span style="display: inline; margin-left: 1%;"><?php echo($request['last_updated']); ?></span>
+                        <span class="requestinfo"><b>Last updated:</b></span>
+                        <span class="requestinfo requestinfo-spaced"><?php echo($request['last_updated']); ?></span>
                       </div>
                     </div>
                   </li>
@@ -101,10 +101,11 @@
                     <li class="list-group-item">
                       <div class="container">
                         <div class="row">
-                          <span style="display: inline;"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span><span class="text-muted"><i><?php echo(" " . $update['created']); ?></i></span>
+                          <span class="requestinfo"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span>
+                          <span class="text-muted"><i><?php echo(" " . $update['created']); ?></i></span>
                         </div>
                         <div class="row">
-                          <span><?php echo($update['msg']); ?></span>
+                          <span><?php echo(filter_var($update['msg'], FILTER_SANITIZE_STRING)); ?></span>
                         </div>
                       </div>
                     </li>

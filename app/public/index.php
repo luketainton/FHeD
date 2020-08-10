@@ -71,7 +71,7 @@
                 <div class="container">
                   <div class="row">
                     <div class="col-10">
-                      <span style="display: inline;" class="text-muted">#<?php echo(sprintf("%'.05d\n", $tkt["id"])); ?> </span><span><b><?php echo($tkt['title']); ?></b></span>
+                      <span class="requestinfo text-muted">#<?php echo(sprintf("%'.05d\n", $tkt["id"])); ?> </span><span><b><?php echo($tkt['title']); ?></b></span>
                       <p class="m-0"><?php echo($tkt['description']); ?></p>
                     </div>
                     <div class="col-2">
@@ -100,7 +100,7 @@
                 <div class="container">
                   <div class="row">
                     <div class="col-10">
-                      <span style="display: inline;" class="text-muted">#<?php echo sprintf("%'.05d\n", $sub["id"]); ?> </span><span><b><?php echo($sub['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . get_user_name($db, $sub['created_by']) . ")"); ?></span>
+                      <span class="requestinfo text-muted">#<?php echo sprintf("%'.05d\n", $sub["id"]); ?> </span><span><b><?php echo($sub['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . get_user_name($db, $sub['created_by']) . ")"); ?></span>
                       <p class="m-0"><?php echo($sub['description']); ?></p>
                     </div>
                     <div class="col-2">
