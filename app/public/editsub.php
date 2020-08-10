@@ -8,7 +8,7 @@
 
     $all_users = get_all_users($db);
 
-    function get_req_subs($uuid) {
+    function get_req_subs($db, $uuid) {
       $stmt = "SELECT * FROM ticket_subscribers WHERE ticket_uuid=:uuid";
       $sql = $db->prepare($stmt);
       $sql->bindParam(':uuid', $uuid);
@@ -18,7 +18,7 @@
       return $result;
     }
 
-    $subs = get_req_subs($request['uuid'])
+    $subs = get_req_subs($db, $request['uuid'])
 ?>
 
 
