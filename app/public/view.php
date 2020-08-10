@@ -51,7 +51,9 @@
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
             <p>
-              <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
+              <?php if ($_SESSION['uuid'] == $request['created_by']) { ?>
+                <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
+              <?php } ?>
               <?php if ($request['status'] != 'Closed') { ?>
                 <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
                 <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Add attachment(s)</a>

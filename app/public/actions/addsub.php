@@ -1,10 +1,10 @@
 <?php
-    $PAGE_NAME = "Add subscriber";
+    $PAGE_NAME = "Add Subscriber";
     require_once __DIR__ . "/../../includes/prereqs.php";
 
     $request = get_request($db, $_POST['rid']);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
+    $is_authorised = if ($_SESSION['uuid'] == $request['created_by']) {return true} else {return false};
 
     // Add subscriber
     if ($is_authorised == true) {
