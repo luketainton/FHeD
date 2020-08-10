@@ -6,15 +6,6 @@
       $closed_requests =  get_my_closed_requests($db);
       $subscriptions = get_subscribed_requests($db);
       $open_requests = get_my_open_requests($db);
-
-      foreach($requests as $req) {
-        if ($req['status'] != "Closed") {
-          array_push($open_requests, $req);
-        } elseif ($req['status'] == "Closed") {
-          array_push($closed_requests, $req);
-        }
-      }
-    }
 ?>
 
 
