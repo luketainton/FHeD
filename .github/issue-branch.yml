@@ -1,9 +1,11 @@
 mode: auto
 silent: false
-branchName: short
+branchName: '${issue.number}'
 branches:
   - label: type/feature
     prefix: feature/
   - label: type/bug
     prefix: bug/
+  - label: type/epic
+    prefix: epic/
 autoCloseIssue: true
