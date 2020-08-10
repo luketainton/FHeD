@@ -3,11 +3,9 @@
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
-      $open_requests = array();
-      $closed_requests = array();
+      $closed_requests =  get_my_closed_requests($db);
       $subscriptions = get_subscribed_requests($db);
-
-      $requests = get_my_open_requests($db);
+      $open_requests = get_my_open_requests($db);
 
       foreach($requests as $req) {
         if ($req['status'] != "Closed") {
