@@ -9,9 +9,7 @@
     // Remove subscriber(s)
     if ($is_authorised == true) {
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-          echo($_POST['addSubSelector']);
-          die();
-          foreach ($_POST['addSubSelector'] as $sub) {
+          foreach ($_POST['addSubSelector[]'] as $sub) {
             try {
                 $stmt = "DELETE FROM ticket_subscribers WHERE ticket_uuid=:tktuuid AND user_uuid=:usruuid";
                 $sql = $db->prepare($stmt);

@@ -50,14 +50,14 @@
           <h1><?php echo($request['title']); ?></h1>
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
-          <?php if ($request['status'] != 'Closed') { ?>
             <p>
-              <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
-              <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Add attachment(s)</a>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closeModal">Close the request</button>
+              <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
+              <?php if ($request['status'] != 'Closed') { ?>
+                <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
+                <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Add attachment(s)</a>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closeModal">Close the request</button>
+              <?php } ?>
             </p>
-            <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
-          <?php } ?>
         </div>
 
         <div class="modal fade" id="closeModal" tabindex="-1" aria-labelledby="closeModalLabel" aria-hidden="true">
