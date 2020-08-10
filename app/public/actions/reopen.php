@@ -10,7 +10,7 @@
       $is_authorised = false;
     };
 
-    // Close request
+    // Reopen request
     if ($is_authorised == true) {
       try {
           $stmt = "UPDATE tickets SET status='Reopened' WHERE uuid=:uuid";
