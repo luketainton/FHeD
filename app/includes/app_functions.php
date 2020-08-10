@@ -1,4 +1,17 @@
 <?php
+  function get_all_users($db) {
+    try {
+      $stmt = "SELECT * FROM users";
+      $sql = $db->prepare($stmt);
+      $sql->execute();
+      $sql->setFetchMode(PDO::FETCH_ASSOC);
+      $result = $sql->fetchAll();
+    } catch (PDOException $e) {
+      echo("Error: " . $e->getMessage());
+    }
+    return $result;
+  }
+
   function get_user_name($db, $user_uuid) {
     try {
       $stmt = "SELECT given_name, family_name FROM users WHERE uuid=:uuid";
