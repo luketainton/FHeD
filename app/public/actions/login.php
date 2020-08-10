@@ -25,7 +25,7 @@
       $alert = array("danger", "Error during check for user record: " . $e->getMessage());
     }
 
-    if empty($user_exist_sql) {
+    if (empty($user_exist_sql)) {
       // User doesn't already exist
       try {
         $stmt = "INSERT INTO users (uuid, uid, given_name, family_name, email) VALUES (:sub, :username, :given, :family, :email)";
