@@ -13,7 +13,7 @@
               $stmt = "INSERT INTO ticket_subscribers (ticket_uuid, user_uuid) VALUES (:tktuuid, :usruuid)";
               $sql = $db->prepare($stmt);
               $sql->bindParam(':tktuuid', $request['uuid']);
-              $sql->bindParam(':usruuid', $POST['addSubSelector']);
+              $sql->bindParam(':usruuid', $_POST['addSubSelector']);
               $sql->execute();
           } catch (PDOException $e) {
               $alert = array("danger", "Failed to add subscriber: " . $e->getMessage());

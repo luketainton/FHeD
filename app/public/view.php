@@ -46,7 +46,7 @@
   <?php } else {
       if ($is_authorised == true) { ?>
       <section class="jumbotron text-center">
-        <div class="container">
+        <div class="container-fluid">
           <h1><?php echo($request['title']); ?></h1>
           <p style="color: gray; font-style: italic;"><?php echo("#" . sprintf("%'.05d\n", $request["id"])); ?></p>
           <p class="lead text-muted"><?php echo($request['description']); ?></p>
@@ -54,9 +54,9 @@
             <p>
               <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
               <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Add attachment(s)</a>
-              <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
               <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#closeModal">Close the request</button>
             </p>
+            <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
           <?php } ?>
         </div>
 
