@@ -103,8 +103,8 @@
                         <form method="post" action="/actions/delsub">
                           <div class="form-group">
                             <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
-                            <label for="delSubSelector">Remove subscribers:</label>
-                            <select multiple class="form-control" id="delSubSelector" name="delSubSelector">
+                            <label for="delSubSelector[]">Remove subscribers:</label>
+                            <select multiple class="form-control" id="delSubSelector[]" name="delSubSelector[]">
                               <?php foreach($authorised_users as $usr) {
                                   echo("<option value='" . $usr['uuid'] . "'>" . get_user_name($db, $usr) . "</option>");
                                 } ?>
