@@ -101,7 +101,8 @@
                     <li class="list-group-item">
                       <div class="container">
                         <div class="row">
-                          <span class="requestinfo"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span><span class="text-muted"><i><?php echo(" " . $update['created']); ?></i></span>
+                          <span class="requestinfo"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span>
+                          <span class="requestinfo-spaced text-muted"><i><?php echo($update['created']); ?></i></span>
                         </div>
                         <div class="row">
                           <span><?php echo(filter_var($update['msg'], FILTER_SANITIZE_STRING)); ?></span>

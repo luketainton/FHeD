@@ -153,7 +153,7 @@
                         <div class="container">
                           <div class="row">
                             <span class="requestinfo"><b><?php echo(get_user_name($db, $file['user'])); ?></b></span>
-                            <span class="requestinfo requestinfo-spaced text-muted"><i> <?php echo(" " . $file['created']); ?></i></span>
+                            <span class="requestinfo requestinfo-spaced text-muted"><i> <?php echo($file['created']); ?></i></span>
                           </div>
                           <div class="row">
                             <a target="_blank" href="<?php echo('/actions/download?file=' . $file['id']); ?>"><span><?php echo($file['filename']); ?></span></a>
@@ -179,7 +179,7 @@
                       <div class="container">
                         <div class="row">
                           <span class="requestinfo"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span>
-                          <span class="requestinfo requestinfo-spaced text-muted"><i> <?php echo(" " . $update['created']); ?></i></span>
+                          <span class="requestinfo requestinfo-spaced text-muted"><i> <?php echo($update['created']); ?></i></span>
                         </div>
                         <div class="row">
                           <span><?php echo(filter_var($update['msg'], FILTER_SANITIZE_STRING)); ?></span>
