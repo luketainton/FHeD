@@ -53,7 +53,9 @@
             <p>
               <?php if ($_SESSION['uuid'] == $request['created_by']) { ?>
                 <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-secondary my-2'>Manage subscribers</a>
-              <?php } ?>
+                <?php if ($request['status'] == 'Closed') { ?>
+                <a href='/editsub?rid=<?php echo($request["uuid"]); ?>' class='btn btn-success my-2'>Reopen request</a>
+              <?php }} ?>
               <?php if ($request['status'] != 'Closed') { ?>
                 <a href='/update?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Update the request</a>
                 <a href='/upload?rid=<?php echo($request["uuid"]); ?>' class='btn btn-primary my-2'>Add attachment(s)</a>
