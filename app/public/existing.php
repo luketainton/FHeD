@@ -24,7 +24,7 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1>Open requests</h1>
+      <h1>Existing requests</h1>
       <p class="lead text-muted">
         Here you can find all of your requests, and other requests that you are subscribed to.
       </p>
