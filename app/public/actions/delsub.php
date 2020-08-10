@@ -9,14 +9,16 @@
     // Add subscriber
     if ($is_authorised == true) {
         if($_SERVER['REQUEST_METHOD'] == 'POST') {
-          try {
-              $stmt = "DELETE FROM ticket_subscribers WHERE ticket_uuid=:tktuuid AND user_uuid=:usruuid";
-              $sql = $db->prepare($stmt);
-              $sql->bindParam(':tktuuid', $request['uuid']);
-              $sql->bindParam(':usruuid', $POST['addSubSelector']);
-              $sql->execute();
-          } catch (PDOException $e) {
-              $alert = array("danger", "Failed to remove subscriber(s): " . $e->getMessage());
+          foreach ($_POST['addSubSelector'] as $sub) {
+            try {
+                $stmt = "DELETE FROM ticket_subscribers WHERE ticket_uuid=:tktuuid AND user_uuid=:usruuid";
+                $sql = $db->prepare($stmt);
+                $sql->bindParam(':tktuuid', $request['uuid']);
+                $sql->bindParam(':usruuid', $sub);
+                $sql->execute();
+            } catch (PDOException $e) {
+                $alert = array("danger", "Failed to remove subscriber(s): " . $e->getMessage());
+            }
           }
         }
         $newURL = "/managesub?rid=" . $request['uuid'];
