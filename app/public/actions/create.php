@@ -7,12 +7,11 @@
     try {
         // Process ticket data
         $tkt_uuid = Uuid::uuid4()->toString();
-        $stmt = "INSERT INTO tickets (uuid, title, description, status, created_by) VALUES (:tktuuid, :title, :description, :status, :user)";
+        $stmt = "INSERT INTO tickets (uuid, title, description, status, created_by) VALUES (:tktuuid, :title, :description, 'New', :user)";
         $sql = $db->prepare($stmt);
         $sql->bindParam(':tktuuid', $tkt_uuid);
         $sql->bindParam(':title', $_POST['title']);
         $sql->bindParam(':description', $_POST['description']);
-        $sql->bindParam(':status', 'New');
         $sql->bindParam(':user', $_SESSION['uuid']);
         $sql->execute();
     } catch (PDOException $e) {
