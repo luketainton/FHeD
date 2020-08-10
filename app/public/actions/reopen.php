@@ -23,7 +23,7 @@
       $newURL = "/";
       echo("<script>window.location = '$newURL'</script>");
     } else {
-        $alert = array("danger", "You are not authorised to close this request.");
+        $alert = array("danger", "You are not authorised to reopen this request.");
         $newURL = "/view?rid=" . $request['uuid'];
         echo("<script>window.location = '$newURL'</script>");
     }
