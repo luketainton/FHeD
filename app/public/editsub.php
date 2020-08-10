@@ -106,8 +106,7 @@
                             <label for="delSubSelector">Remove subscribers:</label>
                             <select multiple class="form-control" id="delSubSelector" name="delSubSelector">
                               <?php foreach($authorised_users as $usr) {
-                                  $usr_name = get_user_name($db, $usr['uuid']) . " (" . $usr['uid'] . ")";
-                                  echo("<option value='" . $usr['uuid'] . "'>" . $usr_name . "</option>");
+                                  echo("<option value='" . $usr['uuid'] . "'>" . get_user_name($db, $usr) . "</option>");
                                 } ?>
                             </select>
                           </div>
@@ -125,9 +124,8 @@
                             <label for="addSubSelector">Add subscriber:</label>
                             <select class="form-control" id="addSubSelector" name="addSubSelector">
                               <?php foreach($all_users as $usr) {
-                                if (!in_array($usr['uuid'], $authorised_users)) {
-                                  $usr_name = get_user_name($db, $usr['uuid']) . " (" . $usr['uid'] . ")";
-                                  echo("<option value='" . $usr['uuid'] . "'>" . $usr_name . "</option>");
+                                if (!in_array($usr['uuid'], $authorised_users) && $usr['uuid'] != $request['created_by'] && $usr['uid'] != "system") {
+                                  echo("<option value='" . $usr['uuid'] . "'>" . get_user_name($db, $usr['uuid']) . "</option>");
                                 }
                               } ?>
                             </select>

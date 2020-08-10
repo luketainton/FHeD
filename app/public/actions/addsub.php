@@ -19,11 +19,11 @@
               $alert = array("danger", "Failed to add subscriber: " . $e->getMessage());
           }
         }
-        $newURL = "/managesub?rid=" . $request['uuid'];
+        $newURL = "/editsub?rid=" . $request['uuid'];
         echo("<script>window.location = '$newURL'</script>");
     } else {
         $alert = array("danger", "You are not authorised to manage subscribers on this request.");
-        $newURL = "/managesub?rid=" . $request['uuid'];
+        $newURL = "/editsub?rid=" . $request['uuid'];
         echo("<script>window.location = '$newURL'</script>");
     }
 
