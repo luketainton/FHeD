@@ -1,11 +1,12 @@
 <?php
-    $PAGE_NAME = "Upload file";
+    $PAGE_NAME = "Manage request subscribers";
     require_once __DIR__ . "/../includes/header.php";
 
     $request = get_request($db, $_GET['rid']);
-    $updates = get_updates($db, $request);
     $authorised_users = get_subscribers($db, $request);
     $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
+
+    $all_users = get_all_users($db);
 ?>
 
 
@@ -38,7 +39,9 @@
           <div class="row">
             <div class="col-4">
               <div class="card mx-auto">
-                <div class="card-header"><span class="mdi mdi-information-outline"></span> Information</div>
+                <div class="card-header"><span class="mdi mdi-information-outline">
+                  </span> Information
+                </div>
                 <ul class="list-group list-group-flush">
                   <li class="list-group-item">
                     <div class="container">
@@ -90,49 +93,51 @@
 
             <div class="col-8">
               <div class="card mx-auto">
-                <div class="card-header"><span class="mdi mdi-update"></span> Updates</div>
+                <div class="card-header">
+                  <span class="mdi mdi-rss"></span> Manage Subscribers
+                </div>
                 <ul class="list-group list-group-flush">
-                  <?php
-                    if (count($updates) == 0) {
-                      echo("<center><b>No updates</b></center>");
-                    } else {
-                      foreach($updates as $update) {
-                  ?>
-                    <li class="list-group-item">
-                      <div class="container">
-                        <div class="row">
-                          <span style="display: inline;"><b><?php echo(get_user_name($db, $update['user'])); ?></b></span><span class="text-muted"><i><?php echo(" " . $update['created']); ?></i></span>
-                        </div>
-                        <div class="row">
-                          <span><?php echo($update['msg']); ?></span>
-                        </div>
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <form method="post" action="/actions/delsub">
+                          <div class="form-group">
+                            <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
+                            <label for="delSubSelector">Remove subscribers:</label>
+                            <select multiple class="form-control" id="delSubSelector" name="delSubSelector">
+                              <?php foreach($authorised_users as $usr) {
+                                  $usr_name = get_user_name($db, $usr['uuid']) . " (" . $usr['uid'] . ")";
+                                  echo("<option value='" . $usr['uuid'] . "'>" . $usr_name . "</option>");
+                                } ?>
+                            </select>
+                          </div>
+                          <button type="submit" class="btn btn-danger">Submit</button>
+                        </form>
                       </div>
-                    </li>
-                  <?php } } ?>
+                    </div>
+                  </li>
+                  <li class="list-group-item">
+                    <div class="container">
+                      <div class="row">
+                        <form method="post" action="/actions/addsub">
+                          <div class="form-group">
+                            <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
+                            <label for="addSubSelector">Add subscriber:</label>
+                            <select class="form-control" id="addSubSelector" name="addSubSelector">
+                              <?php foreach($all_users as $usr) {
+                                if (!in_array($usr['uuid'], $authorised_users)) {
+                                  $usr_name = get_user_name($db, $usr['uuid']) . " (" . $usr['uid'] . ")";
+                                  echo("<option value='" . $usr['uuid'] . "'>" . $usr_name . "</option>");
+                                }
+                              } ?>
+                            </select>
+                          </div>
+                          <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                      </div>
+                    </div>
+                  </li>
                 </ul>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <section style="margin-top: 2%;">
-        <div class="container">
-          <div class="row">
-            <div class="col-12">
-              <div class="card mx-auto">
-                <div class="card-header"><span class="mdi mdi-send-outline"></span> Edit Subscriber</div>
-                  <form action="/actions/update" method="post" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
-                    </div>
-                    <div class="form-group" style="margin: 2%;">
-                      <textarea type="text" class="form-control" id="msg" name="msg" rows="3"></textarea>
-                      <button type="submit" class="btn btn-primary" style="margin-top: 2%;">Submit</button>
-                      <a href="/view?rid=<?php echo($_GET['rid']); ?>" class="btn btn-danger" style="margin-top: 2%;">Cancel</a>
-                    </div>
-                  </form>
               </div>
             </div>
           </div>
