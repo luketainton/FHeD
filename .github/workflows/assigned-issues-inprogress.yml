@@ -1,0 +1,15 @@
+name: Run project automation tasks
+
+on:
+  issues:
+    types: [assigned]
+
+jobs:
+  issues-inprogress:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: alex-page/github-project-automation-plus@v0.2.4
+      with:
+        project: FHeD v1.0
+        column: In Progress
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
