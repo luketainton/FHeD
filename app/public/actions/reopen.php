@@ -4,7 +4,11 @@
 
     $request = get_request($db, $_GET['rid']);
     $authorised_users = get_subscribers($db, $request);
-    $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
+    if ($_SESSION['uuid'] == $request['created_by']) {
+      $is_authorised = true;
+    } else {
+      $is_authorised = false;
+    };
 
     // Close request
     if ($is_authorised == true) {
