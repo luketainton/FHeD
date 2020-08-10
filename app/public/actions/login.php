@@ -13,7 +13,7 @@
         'email' => $oidc->requestUserInfo('email'),
       );
     } catch (Jumbojett\OpenIDConnectClientException $e) {
-      echo("Error during OpenID Connect authentication: " . $e->getMessage() . "<br>");
+      $alert = array("danger", "Error during OpenID Connect authentication: " . $e->getMessage());
     }
 
     // Check if the user already exists
@@ -23,7 +23,7 @@
       $user_exist_sql->execute();
       $result = $user_exist_sql->setFetchMode(PDO::FETCH_ASSOC); // If user doesn't exist, $result will be null
     } catch (PDOException $e) {
-      echo("Error: " . $e->getMessage() . "<br>");
+      $alert = array("danger", "Error during check for user record: " . $e->getMessage());
     }
 
     if ($result != null) {
@@ -38,7 +38,7 @@
         $sql->bindParam(':email', $oidc_user['email']);
         $sql->execute();
       } catch (PDOException $e) {
-        echo("Error running SQL (Update existing user): <br>" . $e->getMessage() . "<br>");
+        $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
       }
     } else {
       // User doesn't already exist
@@ -52,7 +52,7 @@
         $sql->bindParam(':email', $oidc_user['email']);
         $sql->execute();
       } catch (PDOException $e) {
-        echo("Error running SQL (Add new user): <br>" . $e->getMessage() . "<br>");
+        $alert = array("danger", "Error during creation of new user record: " . $e->getMessage());
       }
     }
 
