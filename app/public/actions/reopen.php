@@ -20,7 +20,7 @@
       } catch (PDOException $e) {
           $alert = array("danger", "Failed to reopen request: " . $e->getMessage());
       }
-      $newURL = "/";
+      $newURL = "/view?rid=" . $request['uuid'];
       echo("<script>window.location = '$newURL'</script>");
     } else {
         $alert = array("danger", "You are not authorised to reopen this request.");

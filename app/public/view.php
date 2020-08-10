@@ -79,7 +79,7 @@
                 <?php } ?>
               <?php } elseif ($request['status'] == 'Closed') { ?>
                 <?php if ($_SESSION['uuid'] == $request['created_by']) { ?>
-                  <a href='/reopen?rid=<?php echo($request["uuid"]); ?>' class='btn btn-success my-2'>Reopen request</a>
+                  <a href='/actions/reopen?rid=<?php echo($request["uuid"]); ?>' class='btn btn-success my-2'>Reopen request</a>
                 <?php } } ?>
             </p>
         </div>
