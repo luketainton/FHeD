@@ -7,15 +7,15 @@
     try {
         // Process ticket data
         $tkt_uuid = Uuid::uuid4()->toString();
-        $stmt = "INSERT INTO tickets (uuid, title, description, created_by) VALUES (:tktuuid, :title, :description, :user)";
+        $stmt = "INSERT INTO tickets (uuid, title, description, status, created_by) VALUES (:tktuuid, :title, :description, :status, :user)";
         $sql = $db->prepare($stmt);
         $sql->bindParam(':tktuuid', $tkt_uuid);
         $sql->bindParam(':title', $_POST['title']);
         $sql->bindParam(':description', $_POST['description']);
+        $sql->bindParam(':status', 'New');
         $sql->bindParam(':user', $_SESSION['uuid']);
         $sql->execute();
     } catch (PDOException $e) {
-        // echo("Error: <br>" . $e->getMessage() . "<br>");
         $alert = array("danger", "Failed to create request: " . $e->getMessage());
     }
 
@@ -39,7 +39,7 @@
         $alert = array("danger", "Failed to upload file: " . $e->getMessage());
       }
     }
-    
+
     $newURL = "/view?rid=" . $tkt_uuid;
     echo("<script>window.location = '$newURL'</script>");
     }
