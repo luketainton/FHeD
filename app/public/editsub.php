@@ -116,7 +116,7 @@
                           <div class="form-group">
                             <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
                             <label for="delSubSelector">Remove subscribers:</label>
-                            <select multiple class="form-control" id="delSubSelector" name="delSubSelector">
+                            <select multiple class="form-control" id="delSubSelector" name="delSubSelector[]">
                               <?php foreach($subs as $sub) {
                                   echo("<option value='" . $sub['sub_id'] . "'>" . get_user_name($db, $sub['user_uuid']) . "</option>");
                                 } ?>
