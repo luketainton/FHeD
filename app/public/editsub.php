@@ -7,6 +7,18 @@
     $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
 
     $all_users = get_all_users($db);
+
+    function get_req_subs($uuid) {
+      $stmt = "SELECT * FROM ticket_subscribers WHERE ticket_uuid=:uuid";
+      $sql = $db->prepare($stmt);
+      $sql->bindParam(':uuid', $uuid);
+      $sql->execute();
+      $sql->setFetchMode(PDO::FETCH_ASSOC);
+      $result = $sql->fetchAll();
+      return $result;
+    }
+
+    $subs = get_req_subs($request['uuid'])
 ?>
 
 
@@ -103,10 +115,10 @@
                         <form method="post" action="/actions/delsub">
                           <div class="form-group">
                             <input type="hidden" id="rid" name="rid" value="<?php echo($request['uuid']); ?>">
-                            <label for="delSubSelector[]">Remove subscribers:</label>
-                            <select multiple class="form-control" id="delSubSelector[]" name="delSubSelector[]">
-                              <?php foreach($authorised_users as $usr) {
-                                  echo("<option value='" . $usr['uuid'] . "'>" . get_user_name($db, $usr) . "</option>");
+                            <label for="delSubSelector">Remove subscribers:</label>
+                            <select multiple class="form-control" id="delSubSelector" name="delSubSelector">
+                              <?php foreach($subs as $sub) {
+                                  echo("<option value='" . $sub['sub_id'] . "'>" . get_user_name($db, $sub['user_uuid']) . "</option>");
                                 } ?>
                             </select>
                           </div>
