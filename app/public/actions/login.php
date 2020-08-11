@@ -21,26 +21,11 @@
       $user_exist_sql = $db->prepare("SELECT uuid FROM users WHERE uuid=:uuid");
       $user_exist_sql->bindParam(':uuid', $oidc_user['sub']);
       $user_exist_sql->execute();
-      $result = $user_exist_sql->setFetchMode(PDO::FETCH_ASSOC); // If user doesn't exist, $result will be null
     } catch (PDOException $e) {
       $alert = array("danger", "Error during check for user record: " . $e->getMessage());
     }
 
-    if ($result != null) {
-      // User already exists
-      try {
-        $stmt = "UPDATE users SET uid=:username, given_name=:given, family_name=:family, email=:email WHERE uuid=:sub";
-        $sql = $db->prepare($stmt);
-        $sql->bindParam(':sub', $oidc_user['sub']);
-        $sql->bindParam(':username', $oidc_user['username']);
-        $sql->bindParam(':given', $oidc_user['given_name']);
-        $sql->bindParam(':family', $oidc_user['family_name']);
-        $sql->bindParam(':email', $oidc_user['email']);
-        $sql->execute();
-      } catch (PDOException $e) {
-        $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
-      }
-    } else {
+    if (empty($user_exist_sql)) {
       // User doesn't already exist
       try {
         $stmt = "INSERT INTO users (uuid, uid, given_name, family_name, email) VALUES (:sub, :username, :given, :family, :email)";
@@ -51,8 +36,22 @@
         $sql->bindParam(':family', $oidc_user['family_name']);
         $sql->bindParam(':email', $oidc_user['email']);
         $sql->execute();
-      } catch (PDOException $e) {
+      } catch (Jumbojett\PDOException $e) {
         $alert = array("danger", "Error during creation of new user record: " . $e->getMessage());
+      }
+    } else {
+      // User already exists
+      try {
+        $stmt = "UPDATE users SET uid=:username, given_name=:given, family_name=:family, email=:email WHERE uuid=:sub";
+        $sql = $db->prepare($stmt);
+        $sql->bindParam(':sub', $oidc_user['sub']);
+        $sql->bindParam(':username', $oidc_user['username']);
+        $sql->bindParam(':given', $oidc_user['given_name']);
+        $sql->bindParam(':family', $oidc_user['family_name']);
+        $sql->bindParam(':email', $oidc_user['email']);
+        $sql->execute();
+      } catch (Jumbojett\PDOException $e) {
+        $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
       }
     }
 
