@@ -7,3 +7,6 @@ The Free HelpDesk is the one-stop shop for all of your IT-related needs. It is a
 # Roadmap
 - [x]  ~~Create framework.~~
 - [x]  ~~Create database creation on install script.~~
+- [ ] Create assigned user view
+- [ ] Create application administrator portal
+- [ ] User profile: add support for other IDPs
