@@ -4,7 +4,7 @@
 
     if (is_signed_in()) {
       $requests = get_my_open_requests($db);
-      $subscriptions = get_subscribed_requests($db);
+      $subscriptions = get_open_subscribed_requests($db);
     }
 
 ?>
