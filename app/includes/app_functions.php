@@ -68,26 +68,23 @@
   }
 
   function get_open_subscribed_requests($db) {
-    $subbed_reqs_arr = array();
     $requests = array();
-    $sub_tickets_stmt = "SELECT ticket_uuid FROM ticket_subscribers WHERE user_uuid=:uuid";
-    $sub_tickets_sql = $db->prepare($sub_tickets_stmt);
-    $sub_tickets_sql->bindParam(':uuid', $_SESSION['uuid']);
-    $sub_tickets_sql->execute();
-    $sub_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
-    $sub_tickets_result = $sub_tickets_sql->fetchAll();
-    foreach ($sub_tickets_result as $tkt) {
-      array_push($subbed_reqs_arr, $tkt['ticket_uuid']);
+    $all_subs = get_subscribed_requests($db);
+    foreach ($all_subs as $sub) {
+      if ($sub['status'] != 'Closed') {
+        array_push($requests, $sub);
+      }
     }
-    $subbed_reqs = implode(",", $subbed_reqs_arr);
-    $stmt = "SELECT * FROM tickets WHERE uuid IN :uuid";
-    $sql = $db->prepare($stmt);
-    $sql->bindParam(':uuid', $subbed_reqs);
-    $sql->execute();
-    $sql->setFetchMode(PDO::FETCH_ASSOC);
-    $result = $sql->fetchAll();
-    foreach ($result as $sub) {
-      array_push($requests, $sub);
+    return $requests;
+  }
+
+  function get_closed_subscribed_requests($db) {
+    $requests = array();
+    $all_subs = get_subscribed_requests($db);
+    foreach ($all_subs as $sub) {
+      if ($sub['status'] == 'Closed') {
+        array_push($requests, $sub);
+      }
     }
     return $requests;
   }
