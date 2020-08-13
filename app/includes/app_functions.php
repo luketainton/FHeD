@@ -69,14 +69,14 @@
 
   function get_open_subscribed_requests($db) {
       $requests = array();
-      $sub_tickets_stmt = "SELECT ticket_uuid FROM ticket_subscribers WHERE user_uuid=:uuid AND status != 'Closed'";
+      $sub_tickets_stmt = "SELECT ticket_uuid FROM ticket_subscribers WHERE user_uuid=:uuid";
       $sub_tickets_sql = $db->prepare($sub_tickets_stmt);
       $sub_tickets_sql->bindParam(':uuid', $_SESSION['uuid']);
       $sub_tickets_sql->execute();
       $sub_tickets_sql->setFetchMode(PDO::FETCH_ASSOC);
       $sub_tickets_result = $sub_tickets_sql->fetchAll();
       foreach ($sub_tickets_result as $tkt) {
-        $stmt = "SELECT * FROM tickets WHERE uuid=:uuid";
+        $stmt = "SELECT * FROM tickets WHERE uuid=:uuid  AND status != 'Closed'";
         $sql = $db->prepare($stmt);
         $sql->bindParam(':uuid', $tkt['ticket_uuid']);
         $sql->execute();
