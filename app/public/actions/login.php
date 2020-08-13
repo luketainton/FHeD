@@ -5,6 +5,7 @@
     // Perform the OIDC authentication
     try {
       $oidc->authenticate();
+      $_SESSION['access_token'] = $oidc->requestClientCredentialsToken()->access_token;
       $oidc_user = array(
         'sub' => $oidc->requestUserInfo('sub'),
         'username' => $oidc->requestUserInfo('preferred_username'),
