@@ -3,9 +3,11 @@ silent: false
 branchName: '${issue.number}'
 branches:
   - label: type/feature
-    prefix: feature/
+    prefix: feat/
   - label: type/bug
     prefix: bug/
   - label: type/epic
     prefix: epic/
+  - label: type/docs
+    prefix: docs/
 autoCloseIssue: true
