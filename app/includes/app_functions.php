@@ -87,7 +87,7 @@
     $sql->setFetchMode(PDO::FETCH_ASSOC);
     $result = $sql->fetchAll();
     foreach ($result as $sub) {
-      array_push($requests, $sub)
+      array_push($requests, $sub);
     }
     return $requests;
   }
