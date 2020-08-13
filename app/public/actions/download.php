@@ -20,7 +20,7 @@
             finfo_close($finfo);
 
             //Use Content-Disposition: attachment to specify the filename
-            header('Content-Disposition: attachment; filename='.$remote_filename);
+            header('Content-Disposition: attachment; filename="'.$remote_filename.'"');
 
             //No cache
             header('Expires: 0');
