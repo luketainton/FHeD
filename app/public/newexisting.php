@@ -31,8 +31,8 @@
         </div>
         <nav>
           <div class="nav nav-tabs" id="my-tab" role="tablist">
-            <a id="nav-my-open-tab" class="nav-link" data-toggle="tab" role="tab" aria-selected="false" href="#my-open" aria-controls="nav-my-open">Open</a>
-            <a id="nav-my-closed-tab" class="nav-link active" data-toggle="tab" role="tab" aria-selected="true" href="#my-closed" aria-controls="nav-my-closed">Closed</a>
+            <a id="nav-my-open-tab" class="nav-link active" data-toggle="tab" role="tab" aria-selected="false" href="#my-open" aria-controls="nav-my-open">Open</a>
+            <a id="nav-my-closed-tab" class="nav-link" data-toggle="tab" role="tab" aria-selected="true" href="#my-closed" aria-controls="nav-my-closed">Closed</a>
           </div>
         </nav>
         <div class="tab-content" id="my-tabContent">
@@ -98,8 +98,8 @@
           </div>
           <nav>
             <div class="nav nav-tabs" id="sub-tab" role="tablist">
-              <a id="nav-sub-open-tab" class="nav-link" data-toggle="tab" role="tab" aria-selected="false" href="#sub-open" aria-controls="nav-sub-open">Open</a>
-              <a id="nav-sub-closed-tab" class="nav-link active" data-toggle="tab" role="tab" aria-selected="true" href="#sub-closed" aria-controls="nav-sub-closed">Closed</a>
+              <a id="nav-sub-open-tab" class="nav-link active" data-toggle="tab" role="tab" aria-selected="false" href="#sub-open" aria-controls="nav-sub-open">Open</a>
+              <a id="nav-sub-closed-tab" class="nav-link" data-toggle="tab" role="tab" aria-selected="true" href="#sub-closed" aria-controls="nav-sub-closed">Closed</a>
             </div>
           </nav>
           <div class="tab-content" id="sub-tabContent">
