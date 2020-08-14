@@ -1,21 +1,18 @@
 <footer class="footer mt-auto py-3">
-  <div class="container">
-    <span class="pull-left text-muted">
-      <?php
-        echo( $_ENV['APP_NAME'] . " v" . $_ENV['APP_VERSION']);
-        if ($_ENV['APP_NAME'] != "FHeD") {echo(", powered by FHeD");};
-      ?>
-    </span>
+  <div class="text-center text-muted">
+    <?php
+      echo( $_ENV['APP_NAME'] . " v" . $_ENV['APP_VERSION']);
+      if ($_ENV['APP_NAME'] != "FHeD") {echo(", powered by FHeD");};
+    ?><br>
     <?php if (is_signed_in()) { ?>
-      <span class="pull-right text-muted">
-        <form method="post" action="https://mailer.tainton.uk/subscription/form" class="listmonk-form">
-          <div class="form-group">
-            <input hidden type="text" class="form-control" id="name" name="name" value="<?php echo($_SESSION['full_name']); ?>">
-            <input hidden type="text" class="form-control" id="email" name="email" value="<?php echo($_SESSION['email']); ?>">
-          </div>
-          <button type="submit" class="btn btn-secondary">Subscribe</button>
-        </form>
-      </span>
+      <form id="mailer-subscribe" method="post" action="https://mailer.tainton.uk/subscription/form" style="margin-top: -1%;">
+        <div class="form-group">
+          <input hidden type="text" class="form-control" id="name" name="name" value="<?php echo($_SESSION['full_name']); ?>">
+          <input hidden type="text" class="form-control" id="email" name="email" value="<?php echo($_SESSION['email']); ?>">
+          <input hidden type="text" class="form-control" id="bdce4" name="l" value="bdce4805-ff03-41f1-be2c-60b28c444e83">
+        </div>
+        <a href="#" onclick="document.getElementById('mailer-subscribe').submit();">Subscribe</a>
+      </form>
     <?php } ?>
   </div>
 </footer>
