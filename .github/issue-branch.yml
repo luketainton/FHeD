@@ -11,5 +11,5 @@ branches:
   - label: type/docs
     prefix: docs/
   - label: type/automation
-    prefix: automation/
+    prefix: auto/
 autoCloseIssue: true
