@@ -10,4 +10,6 @@ branches:
     prefix: epic/
   - label: type/docs
     prefix: docs/
+  - label: type/automation
+    prefix: auto/
 autoCloseIssue: true
