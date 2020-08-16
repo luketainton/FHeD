@@ -33,8 +33,8 @@ jobs:
       env:
         VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
       run: |
-      docker push luketainton/fhed:$VERSION &&
-      docker push luketainton/fhed:latest
+        docker push luketainton/fhed:$VERSION &&
+        docker push luketainton/fhed:latest
       
   docker-ghr:
     name: Push to GitHub Package Registry
