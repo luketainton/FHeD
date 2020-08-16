@@ -13,7 +13,10 @@ jobs:
     - id: bump
       uses: zwaldowski/match-label-action@v1
       with:
-        allowed: major,minor,patch
+        allowed: >
+          major
+          minor
+          patch
     - id: ver
       uses: zwaldowski/semver-release-action@v1
       with:
