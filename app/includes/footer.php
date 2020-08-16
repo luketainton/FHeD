@@ -1,10 +1,13 @@
 <footer class="footer mt-auto py-3">
   <div class="text-center text-muted">
     <?php
-      echo( $_ENV['APP_NAME'] . " v" . $_ENV['APP_VERSION']);
-      if ($_ENV['APP_NAME'] != "FHeD") {echo(", powered by FHeD");};
+      echo($_ENV['APP_NAME'] . " v" . $_ENV['APP_VERSION']);
+      if ($_ENV['APP_NAME'] != "FHeD") {
+          echo(", powered by FHeD");
+      };
     ?><br>
-    <?php if (is_signed_in()) { ?>
+    <?php if (is_signed_in()) {
+        ?>
       <a data-target="#mailingListModal" data-toggle="modal" href="#mailingListModal">Subscribe</a>
       <div class="modal fade" id="mailingListModal" tabindex="-1" aria-labelledby="mailingListModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -31,7 +34,8 @@
           </div>
         </div>
       </div>
-    <?php } ?>
+    <?php
+    } ?>
   </div>
 </footer>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
