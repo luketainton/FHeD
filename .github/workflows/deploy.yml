@@ -4,6 +4,20 @@ on:
     branches: main
 
 jobs:
+  bump-version:
+    name: Bump version number
+    runs-on: ubuntu-latest
+    steps:
+    - id: bump
+      uses: zwaldowski/match-label-action@v1
+      with:
+        allowed: major,minor,patch
+    - id: ver
+      uses: zwaldowski/semver-release-action@v1
+      with:
+        bump: ${{ steps.bump.outputs.match }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
   docker-dh:
     name: Push to Docker Hub
     runs-on: ubuntu-latest
@@ -12,9 +26,15 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     - name: Build image for Docker Hub
-      run: docker build . --file Dockerfile --tag luketainton/fhed:latest
+      env:
+        VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
+      run: docker build . --file Dockerfile --tag luketainton/fhed:$VERSION luketainton/fhed:latest
     - name: Push image to Docker Hub
-      run: docker push luketainton/fhed:latest
+      env:
+        VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
+      run: |
+      docker push luketainton/fhed:$VERSION &&
+      docker push luketainton/fhed:latest
       
   docker-ghr:
     name: Push to GitHub Package Registry
@@ -24,9 +44,15 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u luketainton --password-stdin
     - name: Build image for GitHub Package Registry
-      run: docker build . --file Dockerfile --tag docker.pkg.github.com/luketainton/fhed/fhed:latest
+      env:
+        VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
+      run: docker build . --file Dockerfile --tag docker.pkg.github.com/luketainton/fhed/fhed:latest docker.pkg.github.com/luketainton/fhed/fhed:$VERSION
     - name: Push image to GitHub Package Registry
-      run: docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
+      env:
+        VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
+      run: |
+      docker push docker.pkg.github.com/luketainton/fhed/fhed:$VERSION &&
+      docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
 
   deploy:
     name: Update Docker image on server
