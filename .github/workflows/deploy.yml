@@ -33,7 +33,7 @@ jobs:
       env:
         VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
       run: |
-      docker push luketainton/fhed:$VERSION
+      docker push luketainton/fhed:$VERSION &&
       docker push luketainton/fhed:latest
       
   docker-ghr:
@@ -51,7 +51,7 @@ jobs:
       env:
         VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
       run: |
-      docker push docker.pkg.github.com/luketainton/fhed/fhed:$VERSION
+      docker push docker.pkg.github.com/luketainton/fhed/fhed:$VERSION &&
       docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
 
   deploy:
