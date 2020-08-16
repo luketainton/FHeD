@@ -51,8 +51,8 @@ jobs:
       env:
         VERSION: ${{ jobs.bump-version.steps.ver.outputs.version }}
       run: |
-      docker push docker.pkg.github.com/luketainton/fhed/fhed:$VERSION &&
-      docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
+        docker push docker.pkg.github.com/luketainton/fhed/fhed:$VERSION &&
+        docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
 
   deploy:
     name: Update Docker image on server
