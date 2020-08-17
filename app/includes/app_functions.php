@@ -6,6 +6,22 @@
       return $version;
   }
 
+  function user_exists($db, $uuid)
+  {
+      try {
+          $sql = $db->prepare("SELECT uuid FROM users WHERE uuid=:uuid");
+          $sql->bindParam(':uuid', $uuid);
+          $sql->execute();
+      } catch (PDOException $e) {
+          $alert = array("danger", "Error during check for user record: " . $e->getMessage());
+      }
+      if (empty($sql)) {
+          return false;
+      } else {
+          return true;
+      }
+  }
+
   function get_all_users($db)
   {
       try {
