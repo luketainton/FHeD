@@ -4,28 +4,26 @@ on:
     branches: main
 
 jobs:
-  bump-version:
-    name: Bump version number
+  release-on-push:
     runs-on: ubuntu-latest
     outputs: 
-      ver: ${{ steps.ver.outputs.version }}
+      ver: ${{ steps.release.outputs.version }}
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-    - id: bump
-      uses: zwaldowski/match-label-action@v1
-      with:
-        allowed: >
-          major
-          minor
-          patch
-    - id: ver
-      uses: zwaldowski/semver-release-action@v1
-      with:
-        bump: ${{ steps.bump.outputs.match }}
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+      - id: release
+        uses: rymndhng/release-on-push-action@master
+        with:
+          bump_version_scheme: minor
+          
+      - name: Check Output Parameters
+        run: |
+          echo "Got tag name ${{ steps.release.outputs.tag_name }}"
+          echo "Got release version ${{ steps.release.outputs.version }}"
 
   docker-dh:
     name: Push to Docker Hub
-    needs: [bump-version]
+    needs: [release-on-push]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -33,18 +31,18 @@ jobs:
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     - name: Build image for Docker Hub
       env:
-        VERSION: ${{ needs.bump-version.output.ver }}
+        VERSION: ${{ needs.release-on-push.output.ver }}
       run: docker build . --file Dockerfile --tag luketainton/fhed:$VERSION luketainton/fhed:latest
     - name: Push image to Docker Hub
       env:
-        VERSION: ${{ needs.bump-version.output.ver }}
+        VERSION: ${{ needs.release-on-push.output.ver }}
       run: |
         docker push luketainton/fhed:$VERSION &&
         docker push luketainton/fhed:latest
       
   docker-ghr:
     name: Push to GitHub Package Registry
-    needs: [bump-version]
+    needs: [release-on-push]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -52,11 +50,11 @@ jobs:
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u luketainton --password-stdin
     - name: Build image for GitHub Package Registry
       env:
-        VERSION: ${{ needs.bump-version.output.ver }}
+        VERSION: ${{ needs.release-on-push.output.ver }}
       run: docker build . --file Dockerfile --tag docker.pkg.github.com/luketainton/fhed/fhed:latest docker.pkg.github.com/luketainton/fhed/fhed:$VERSION
     - name: Push image to GitHub Package Registry
       env:
-        VERSION: ${{ needs.bump-version.output.ver }}
+        VERSION: ${{ needs.release-on-push.output.ver }}
       run: |
         docker push docker.pkg.github.com/luketainton/fhed/fhed:$VERSION &&
         docker push docker.pkg.github.com/luketainton/fhed/fhed:latest

@@ -2,7 +2,7 @@
 name: Document request
 about: Request a change to documentation
 title: '📚'
-labels: type/docs
+labels: type:docs
 assignees:
 
 ---
