@@ -1,7 +1,7 @@
 <footer class="footer mt-auto py-3">
   <div class="text-center text-muted">
     <?php
-      echo($_ENV['APP_NAME'] . " v" . $_ENV['APP_VERSION']);
+      echo($_ENV['APP_NAME'] . " " . get_version());
       if ($_ENV['APP_NAME'] != "FHeD") {
           echo(", powered by FHeD");
       };

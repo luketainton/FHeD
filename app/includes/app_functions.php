@@ -1,4 +1,10 @@
 <?php
+
+  function get_version() {
+    $version = "v" . file_get_contents(__DIR__ . '/VERSION');
+    return $version;
+  }
+
   function get_all_users($db) {
     try {
       $stmt = "SELECT * FROM users";
