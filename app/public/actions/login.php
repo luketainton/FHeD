@@ -17,7 +17,7 @@
         $alert = array("danger", "Error during OpenID Connect authentication: " . $e->getMessage());
     }
 
-    if (!user_exists($db, $uuid)) {
+    if (user_exists($db, $oidc_user['sub']) == false) {
         // User doesn't already exist
         try {
             $stmt = "INSERT INTO users (uuid, uid, given_name, family_name, email) VALUES (:sub, :username, :given, :family, :email)";
