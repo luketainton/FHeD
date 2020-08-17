@@ -13,6 +13,7 @@ jobs:
     - id: bump
       uses: zwaldowski/match-label-action@v1
       with:
+        bump: ${{ steps.bump.outputs.match }}
         allowed: >
           major
           minor
