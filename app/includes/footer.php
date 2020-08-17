@@ -1,9 +1,9 @@
 <footer class="footer mt-auto py-3">
   <div class="text-center text-muted">
     <?php
-      echo($_ENV['APP_NAME'] . " " . get_version());
+      echo($_ENV['APP_NAME'] . " " . get_version() . ".<br>");
       if ($_ENV['APP_NAME'] != "FHeD") {
-          echo(", powered by FHeD");
+          echo("Powered by FHeD.");
       };
     ?><br>
     <?php if (is_signed_in()) {
