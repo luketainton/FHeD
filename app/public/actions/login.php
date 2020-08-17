@@ -28,7 +28,7 @@
             $sql->bindParam(':family', $oidc_user['family_name']);
             $sql->bindParam(':email', $oidc_user['email']);
             $sql->execute();
-        } catch (Jumbojett\PDOException $e) {
+        } catch (PDOException $e) {
             echo("Error during creation of new user record: " . $e->getMessage());
             die();
             $alert = array("danger", "Error during creation of new user record: " . $e->getMessage());
@@ -44,7 +44,7 @@
             $sql->bindParam(':family', $oidc_user['family_name']);
             $sql->bindParam(':email', $oidc_user['email']);
             $sql->execute();
-        } catch (Jumbojett\PDOException $e) {
+        } catch (PDOException $e) {
             echo("Error during existing user record update: " . $e->getMessage());
             die();
             $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
