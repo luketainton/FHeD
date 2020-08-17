@@ -12,13 +12,16 @@
           $sql = $db->prepare("SELECT uuid FROM users WHERE uuid=:uuid");
           $sql->bindParam(':uuid', $uuid);
           $sql->execute();
+          $sql->setFetchMode(PDO::FETCH_ASSOC);
+          $result = $sql->fetchAll();
       } catch (PDOException $e) {
           $alert = array("danger", "Error during check for user record: " . $e->getMessage());
+          die();
       }
-      if (empty($sql)) {
-          return false;
+      if (empty($result)) {
+         return false;
       } else {
-          return true;
+         return true;
       }
   }
 
