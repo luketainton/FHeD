@@ -17,16 +17,8 @@
       $alert = array("danger", "Error during OpenID Connect authentication: " . $e->getMessage());
     }
 
-    // Check if the user already exists
-    try {
-      $user_exist_sql = $db->prepare("SELECT uuid FROM users WHERE uuid=:uuid");
-      $user_exist_sql->bindParam(':uuid', $oidc_user['sub']);
-      $user_exist_sql->execute();
-    } catch (PDOException $e) {
-      $alert = array("danger", "Error during check for user record: " . $e->getMessage());
-    }
-
-    if (empty($user_exist_sql)) {
+    if (!user_exists($db, $uuid))
+    {
       // User doesn't already exist
       try {
         $stmt = "INSERT INTO users (uuid, uid, given_name, family_name, email) VALUES (:sub, :username, :given, :family, :email)";
@@ -38,6 +30,8 @@
         $sql->bindParam(':email', $oidc_user['email']);
         $sql->execute();
       } catch (Jumbojett\PDOException $e) {
+        echo("Error during creation of new user record: " . $e->getMessage());
+        die();
         $alert = array("danger", "Error during creation of new user record: " . $e->getMessage());
       }
     } else {
@@ -52,6 +46,8 @@
         $sql->bindParam(':email', $oidc_user['email']);
         $sql->execute();
       } catch (Jumbojett\PDOException $e) {
+        echo("Error during existing user record update: " . $e->getMessage());
+        die();
         $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
       }
     }
