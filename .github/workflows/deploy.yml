@@ -31,16 +31,10 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
     - name: Build image for Docker Hub
-      env:
-        VERSION: ${{ needs.release-on-push.output.ver }}
-        TAG: ${{ needs.release-on-push.output.tag }}
-      run: docker build . --file Dockerfile --build-arg VERSION --tag luketainton/fhed:$TAG --tag luketainton/fhed:latest
+      run: docker build . --file Dockerfile --build-arg VERSION=${{ needs.release-on-push.output.ver }} --tag luketainton/fhed:${{ needs.release-on-push.output.tag }} --tag luketainton/fhed:latest
     - name: Push image to Docker Hub
-      env:
-        VERSION: ${{ needs.release-on-push.output.ver }}
-        TAG: ${{ needs.release-on-push.output.tag }}
       run: |
-        docker push luketainton/fhed:$TAG &&
+        docker push luketainton/fhed:${{ needs.release-on-push.output.tag }} &&
         docker push luketainton/fhed:latest
       
   docker-ghr:
@@ -52,16 +46,10 @@ jobs:
     - name: Login to DockerHub Registry
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login https://docker.pkg.github.com -u luketainton --password-stdin
     - name: Build image for GitHub Package Registry
-      env:
-        VERSION: ${{ needs.release-on-push.output.ver }}
-        TAG: ${{ needs.release-on-push.output.tag }}
-      run: docker build . --file Dockerfile --build-arg VERSION --tag docker.pkg.github.com/luketainton/fhed/fhed:latest --tag docker.pkg.github.com/luketainton/fhed/fhed:$TAG
+      run: docker build . --file Dockerfile --build-arg VERSION=${{ needs.release-on-push.output.ver }} --tag docker.pkg.github.com/luketainton/fhed/fhed:latest --tag docker.pkg.github.com/luketainton/fhed/fhed:${{ needs.release-on-push.output.tag }}
     - name: Push image to GitHub Package Registry
-      env:
-        VERSION: ${{ needs.release-on-push.output.ver }}
-        TAG: ${{ needs.release-on-push.output.tag }}
       run: |
-        docker push docker.pkg.github.com/luketainton/fhed/fhed:$TAG &&
+        docker push docker.pkg.github.com/luketainton/fhed/fhed:${{ needs.release-on-push.output.tag }} &&
         docker push docker.pkg.github.com/luketainton/fhed/fhed:latest
 
   deploy:
