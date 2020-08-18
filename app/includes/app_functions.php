@@ -8,21 +8,21 @@
 
   function oidc_set_vars($sub, $uid, $fname, $lname, $email)
   {
-    $_SESSION['uuid'] = $sub;
-    $_SESSION['username'] = $uid;
-    $_SESSION['given_name'] = $fname;
-    $_SESSION['family_name'] = $lname;
-    $_SESSION['full_name'] = $fname . " " . $lname;
-    $_SESSION['email'] = $email;
+      $_SESSION['uuid'] = $sub;
+      $_SESSION['username'] = $uid;
+      $_SESSION['given_name'] = $fname;
+      $_SESSION['family_name'] = $lname;
+      $_SESSION['full_name'] = $fname . " " . $lname;
+      $_SESSION['email'] = $email;
   }
   
   function is_signed_in()
   {
-    if (isset($_SESSION['is_signed_in'])) {
-      return true;
-    } else {
-      return false;
-    }
+      if (isset($_SESSION['is_signed_in'])) {
+          return true;
+      } else {
+          return false;
+      }
   }
 
   function user_exists($db, $uuid)
@@ -38,9 +38,9 @@
           die();
       }
       if (empty($result)) {
-         return false;
+          return false;
       } else {
-         return true;
+          return true;
       }
   }
 
