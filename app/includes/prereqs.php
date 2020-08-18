@@ -12,7 +12,7 @@ require_once __DIR__ . "/app_functions.php";
 
 // Sentry
 Sentry\init([
-  'dsn' => 'https://8d8f4632fe3e4ec9b005a1b60b660ba5@o435706.ingest.sentry.io/5395475',
+  'dsn' => 'https://7c4607ed5e804d08926cc0bbc0d3fbe9@app.glitchtip.com/59',
   'release' => get_version(),
 ]);
 
