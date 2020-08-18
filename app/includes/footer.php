@@ -3,7 +3,7 @@
     <?php
       echo($_ENV['APP_NAME'] . " " . get_version());
       if ($_ENV['APP_NAME'] != "FHeD") {
-          echo("| Powered by FHeD.");
+          echo("| Powered by FHeD");
       };
     ?><br>
     <?php if (is_signed_in()) {
