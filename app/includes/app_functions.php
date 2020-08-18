@@ -6,6 +6,25 @@
       return $version;
   }
 
+  function oidc_set_vars($sub, $uid, $fname, $lname, $email)
+  {
+    $_SESSION['uuid'] = $sub;
+    $_SESSION['username'] = $uid;
+    $_SESSION['given_name'] = $fname;
+    $_SESSION['family_name'] = $lname;
+    $_SESSION['full_name'] = $fname . " " . $lname;
+    $_SESSION['email'] = $email;
+  }
+  
+  function is_signed_in()
+  {
+    if (isset($_SESSION['is_signed_in'])) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   function user_exists($db, $uuid)
   {
       try {
@@ -15,7 +34,7 @@
           $sql->setFetchMode(PDO::FETCH_ASSOC);
           $result = $sql->fetchAll();
       } catch (PDOException $e) {
-          $alert = array("danger", "Error during check for user record: " . $e->getMessage());
+          throw new Exception("Error in user_exists(): " . $e->getMessage());
           die();
       }
       if (empty($result)) {
@@ -34,7 +53,8 @@
           $sql->setFetchMode(PDO::FETCH_ASSOC);
           $result = $sql->fetchAll();
       } catch (PDOException $e) {
-          echo("Error: " . $e->getMessage());
+          throw new Exception("Error in get_all_users(): " . $e->getMessage());
+          die();
       }
       return $result;
   }
@@ -50,7 +70,8 @@
           $result = $sql->fetchAll();
           $usr = $result[0]['given_name'] . " " . $result[0]['family_name'];
       } catch (PDOException $e) {
-          echo("Error: " . $e->getMessage());
+          throw new Exception("Error in get_user_name(): " . $e->getMessage());
+          die();
       }
       return $usr;
   }
