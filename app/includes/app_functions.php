@@ -15,7 +15,7 @@
       $_SESSION['full_name'] = $fname . " " . $lname;
       $_SESSION['email'] = $email;
   }
-  
+
   function is_signed_in()
   {
       if (isset($_SESSION['is_signed_in'])) {
