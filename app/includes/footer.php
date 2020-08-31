@@ -1,3 +1,4 @@
+</main>
 <footer class="footer mt-auto py-3">
   <div class="text-center text-muted">
     <?php

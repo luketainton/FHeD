@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#563d7c">
     <link rel="icon" type="image/png" href="/favicon.png">
-    <title><?php echo( $PAGE_TITLE ); ?></title>
+    <title><?php echo($PAGE_TITLE); ?></title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -19,6 +19,8 @@
   </head>
 
   <body class="d-flex flex-column h-100">
+    <!-- Begin page content -->
+    <main role="main" class="flex-shrink-0">
     <header>
     <!-- Fixed navbar -->
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -32,10 +34,14 @@
                 <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link <?php if (!is_signed_in()) {echo(' disabled');} ?>" href="/new">New request</a>
+                <a class="nav-link <?php if (!is_signed_in()) {
+    echo(' disabled');
+} ?>" href="/new">New request</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link <?php if (!is_signed_in()) {echo(' disabled');} ?>" href="/existing">Existing requests</a>
+                <a class="nav-link <?php if (!is_signed_in()) {
+    echo(' disabled');
+} ?>" href="/existing">Existing requests</a>
                 </li>
             </ul>
         <div class="mt-2 mt-md-0">
