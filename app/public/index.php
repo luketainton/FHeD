@@ -10,10 +10,6 @@
 ?>
 
 
-
-<!-- Begin page content -->
-<main role="main" class="flex-shrink-0">
-
   <section>
     <?php
       if(isset($alert)) {
@@ -117,8 +113,6 @@
       </div>
     </div>
   <?php } ?>
-
-</main>
 
 <?php
     require_once __DIR__ . "/../includes/footer.php";
