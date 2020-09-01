@@ -15,13 +15,23 @@
     $_SESSION['full_name'] = $fname . " " . $lname;
     $_SESSION['email'] = $email;
   }
-  
+
   function is_signed_in()
   {
     if (isset($_SESSION['is_signed_in'])) {
       return true;
     } else {
       return false;
+    }
+  }
+
+  function is_agent()
+  {
+    // Some SQL commands go here
+    if ($agent_result) {
+       return true;
+    } else {
+       return false;
     }
   }
 
