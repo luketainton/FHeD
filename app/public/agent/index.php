@@ -1,10 +1,9 @@
 <?php
-    $PAGE_NAME = "Home";
+    $PAGE_NAME = "Agent Home";
     require_once __DIR__ . "/../../includes/header.php";
 
     if (is_signed_in()) {
-        $requests = get_my_open_requests($db);
-        $subscriptions = get_open_subscribed_requests($db);
+        $requests = get_my_assigned_requests($db);
     }
 
 ?>
@@ -27,30 +26,23 @@
       }
     ?>
   </section>
-
+  <?php if (is_agent) { ?>
   <section class="jumbotron text-center">
-    <div class="container">
-      <h1>Welcome to <?php echo($_ENV['APP_NAME']); ?></h1>
-      <p class="lead text-muted">
-        <?php
-          if ($_ENV['APP_NAME'] == "FHeD") {
-              echo("The Free HelpDesk");
-          } else {
-              echo($_ENV['APP_NAME']);
-          };
-        ?>
-        is the one-stop shop for all of your IT-related needs. Let us know how we can help you by opening a request.
-      </p>
-      <?php if (is_signed_in() AND ) { ?>
-        <p>
-          <a href='/open' class='btn btn-primary my-2'>View open requests</a>
-          <a href='/existing' class='btn btn-secondary my-2'>View all requests</a>
+      <div class="container">
+        <h1>Welcome to <?php echo($_ENV['APP_NAME']); ?> Agent Area</h1>
+        <p class="lead text-muted">
+          Under construction
         </p>
-      <?php } else { ?>
-        <p><b>Please log in to view requests.</b></p>
-      <?php } ?>
-    </div>
-  </section>
+        <?php if (is_signed_in()) { ?>
+          <p>
+            <a href='/open' class='btn btn-primary my-2'>View open requests</a>
+            <a href='/existing' class='btn btn-secondary my-2'>View all requests</a>
+          </p>
+        <?php } else { ?>
+          <p><b>Please log in to view requests.</b></p>
+        <?php } ?>
+      </div>
+    </section>
 
   <?php if (is_signed_in()) { ?>
     <div class="container" style="margin-top: -5%">
@@ -86,40 +78,17 @@
             </ul>
           </div>
         </div>
-
-        <div class="col-sm">
-          <div class="card mx-auto">
-            <div class="card-header">
-              <span class="mdi mdi-rss"></span> My Subscribed Requests
-            </div>
-            <ul class="list-group list-group-flush">
-              <?php
-                if (count($subscriptions) == 0) {
-                    echo("<center><b>No subscribed tickets</b></center>");
-                } else {
-                    foreach ($subscriptions as $sub) { ?>
-              <li class="list-group-item">
-                <div class="container">
-                  <div class="row">
-                    <div class="col-10">
-                      <span class="requestinfo text-muted">#<?php echo sprintf("%'.05d\n", $sub["id"]); ?> </span><span><b><?php echo($sub['title']); ?></b></span> <span style="display: inline;" class="text-muted"><?php echo("(Creator: " . get_user_name($db, $sub['created_by']) . ")"); ?></span>
-                      <p class="m-0"><?php echo($sub['description']); ?></p>
-                    </div>
-                    <div class="col-2">
-                      <a class="btn btn-success float-right" href="view?rid=<?php echo($sub["uuid"]); ?>" role="button">Go</a>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              <?php }
-                } ?>
-            </ul>
-          </div>
-        </section>
-        </div>
       </div>
     </div>
   <?php } ?>
+<?php } else { ?>
+  <div class="container">
+    <h1>Access Denied</h1>
+    <p class="lead text-muted">
+      You do not have permission to access this area.
+    </p>
+  </div>
+<?php } ?>
 
 <?php
     require_once __DIR__ . "/../includes/footer.php";
