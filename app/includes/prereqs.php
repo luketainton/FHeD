@@ -7,6 +7,15 @@ require_once __DIR__ . "/../vendor/autoload.php";
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . "/..");
 $dotenv->load();
 
+// Custom functions
+require_once __DIR__ . "/app_functions.php";
+
+// Sentry
+Sentry\init([
+  'dsn' => 'https://7c4607ed5e804d08926cc0bbc0d3fbe9@app.glitchtip.com/59',
+  'release' => get_version(),
+]);
+
 // Database auto-generation
 if (file_exists("/../includes/install.php")) {
   return;
@@ -33,26 +42,4 @@ $oidc = new OpenIDConnectClient($_ENV['OIDC_HOST'], $_ENV['OIDC_CLIENT_ID'], $_E
 if ($_ENV['OIDC_DISABLE_SSL'] == "true") {
   $oidc->setVerifyHost(false);
   $oidc->setVerifyPeer(false);
-}
-
-
-// Custom functions
-
-require_once __DIR__ . "/app_functions.php";
-
-function oidc_set_vars($sub, $uid, $fname, $lname, $email) {
-  $_SESSION['uuid'] = $sub;
-  $_SESSION['username'] = $uid;
-  $_SESSION['given_name'] = $fname;
-  $_SESSION['family_name'] = $lname;
-  $_SESSION['full_name'] = $fname . " " . $lname;
-  $_SESSION['email'] = $email;
-}
-
-function is_signed_in() {
-  if (isset($_SESSION['is_signed_in'])) {
-    return true;
-  } else {
-    return false;
-  }
 }

@@ -4,9 +4,9 @@
 
     // Perform the OIDC authentication
     try {
-      $oidc->authenticate();
-      $_SESSION['access_token'] = $oidc->requestClientCredentialsToken()->access_token;
-      $oidc_user = array(
+        $oidc->authenticate();
+        $_SESSION['access_token'] = $oidc->requestClientCredentialsToken()->access_token;
+        $oidc_user = array(
         'sub' => $oidc->requestUserInfo('sub'),
         'username' => $oidc->requestUserInfo('preferred_username'),
         'given_name' => $oidc->requestUserInfo('given_name'),
@@ -14,46 +14,41 @@
         'email' => $oidc->requestUserInfo('email'),
       );
     } catch (Jumbojett\OpenIDConnectClientException $e) {
-      $alert = array("danger", "Error during OpenID Connect authentication: " . $e->getMessage());
+        $alert = array("danger", "Error during OpenID Connect authentication: " . $e->getMessage());
     }
 
-    // Check if the user already exists
-    try {
-      $user_exist_sql = $db->prepare("SELECT uuid FROM users WHERE uuid=:uuid");
-      $user_exist_sql->bindParam(':uuid', $oidc_user['sub']);
-      $user_exist_sql->execute();
-    } catch (PDOException $e) {
-      $alert = array("danger", "Error during check for user record: " . $e->getMessage());
-    }
-
-    if (empty($user_exist_sql)) {
-      // User doesn't already exist
-      try {
-        $stmt = "INSERT INTO users (uuid, uid, given_name, family_name, email) VALUES (:sub, :username, :given, :family, :email)";
-        $sql = $db->prepare($stmt);
-        $sql->bindParam(':sub', $oidc_user['sub']);
-        $sql->bindParam(':username', $oidc_user['username']);
-        $sql->bindParam(':given', $oidc_user['given_name']);
-        $sql->bindParam(':family', $oidc_user['family_name']);
-        $sql->bindParam(':email', $oidc_user['email']);
-        $sql->execute();
-      } catch (Jumbojett\PDOException $e) {
-        $alert = array("danger", "Error during creation of new user record: " . $e->getMessage());
-      }
+    if (user_exists($db, $oidc_user['sub']) == false) {
+        // User doesn't already exist
+        try {
+            $stmt = "INSERT INTO users (uuid, uid, given_name, family_name, email) VALUES (:sub, :username, :given, :family, :email)";
+            $sql = $db->prepare($stmt);
+            $sql->bindParam(':sub', $oidc_user['sub']);
+            $sql->bindParam(':username', $oidc_user['username']);
+            $sql->bindParam(':given', $oidc_user['given_name']);
+            $sql->bindParam(':family', $oidc_user['family_name']);
+            $sql->bindParam(':email', $oidc_user['email']);
+            $sql->execute();
+        } catch (PDOException $e) {
+            echo("Error during creation of new user record: " . $e->getMessage());
+            die();
+            $alert = array("danger", "Error during creation of new user record: " . $e->getMessage());
+        }
     } else {
-      // User already exists
-      try {
-        $stmt = "UPDATE users SET uid=:username, given_name=:given, family_name=:family, email=:email WHERE uuid=:sub";
-        $sql = $db->prepare($stmt);
-        $sql->bindParam(':sub', $oidc_user['sub']);
-        $sql->bindParam(':username', $oidc_user['username']);
-        $sql->bindParam(':given', $oidc_user['given_name']);
-        $sql->bindParam(':family', $oidc_user['family_name']);
-        $sql->bindParam(':email', $oidc_user['email']);
-        $sql->execute();
-      } catch (Jumbojett\PDOException $e) {
-        $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
-      }
+        // User already exists
+        try {
+            $stmt = "UPDATE users SET uid=:username, given_name=:given, family_name=:family, email=:email WHERE uuid=:sub";
+            $sql = $db->prepare($stmt);
+            $sql->bindParam(':sub', $oidc_user['sub']);
+            $sql->bindParam(':username', $oidc_user['username']);
+            $sql->bindParam(':given', $oidc_user['given_name']);
+            $sql->bindParam(':family', $oidc_user['family_name']);
+            $sql->bindParam(':email', $oidc_user['email']);
+            $sql->execute();
+        } catch (PDOException $e) {
+            echo("Error during existing user record update: " . $e->getMessage());
+            die();
+            $alert = array("danger", "Error during existing user record update: " . $e->getMessage());
+        }
     }
 
     oidc_set_vars($oidc_user['sub'], $oidc_user['username'], $oidc_user['given_name'], $oidc_user['family_name'], $oidc_user['email']);
@@ -62,4 +57,3 @@
     $_SESSION['is_signed_in'] = "true";
 
     header('Location: /');
-?>

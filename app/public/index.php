@@ -3,21 +3,17 @@
     require_once __DIR__ . "/../includes/header.php";
 
     if (is_signed_in()) {
-      $requests = get_my_open_requests($db);
-      $subscriptions = get_open_subscribed_requests($db);
+        $requests = get_my_open_requests($db);
+        $subscriptions = get_open_subscribed_requests($db);
     }
 
 ?>
 
 
-
-<!-- Begin page content -->
-<main role="main" class="flex-shrink-0">
-
   <section>
     <?php
-      if(isset($alert)) {
-        echo("
+      if (isset($alert)) {
+          echo("
         <div class='container'>
           <div class='alert alert-" . $alert[0] . " alert-dismissible fade show' role='alert'>
             " . $alert[1] . "
@@ -27,7 +23,7 @@
           </div>
         </div>
       ");
-      unset($alert);
+          unset($alert);
       }
     ?>
   </section>
@@ -37,7 +33,11 @@
       <h1>Welcome to <?php echo($_ENV['APP_NAME']); ?></h1>
       <p class="lead text-muted">
         <?php
-          if ($_ENV['APP_NAME'] == "FHeD") {echo("The Free HelpDesk");} else {echo($_ENV['APP_NAME']);};
+          if ($_ENV['APP_NAME'] == "FHeD") {
+              echo("The Free HelpDesk");
+          } else {
+              echo($_ENV['APP_NAME']);
+          };
         ?>
         is the one-stop shop for all of your IT-related needs. Let us know how we can help you by opening a request.
       </p>
@@ -63,10 +63,10 @@
             <ul class="list-group list-group-flush">
               <?php
                 if (count($requests) == 0) {
-                  echo("<center><b>No open tickets</b></center>");
+                    echo("<center><b>No open tickets</b></center>");
                 } else {
-                  foreach($requests as $tkt) {
-              ?>
+                    foreach ($requests as $tkt) {
+                        ?>
               <li class="list-group-item">
                 <div class="container">
                   <div class="row">
@@ -80,7 +80,9 @@
                   </div>
                 </div>
               </li>
-              <?php } } ?>
+              <?php
+                    }
+                } ?>
             </ul>
           </div>
         </div>
@@ -93,9 +95,9 @@
             <ul class="list-group list-group-flush">
               <?php
                 if (count($subscriptions) == 0) {
-                  echo("<center><b>No subscribed tickets</b></center>");
+                    echo("<center><b>No subscribed tickets</b></center>");
                 } else {
-                  foreach($subscriptions as $sub) { ?>
+                    foreach ($subscriptions as $sub) { ?>
               <li class="list-group-item">
                 <div class="container">
                   <div class="row">
@@ -109,7 +111,8 @@
                   </div>
                 </div>
               </li>
-              <?php } } ?>
+              <?php }
+                } ?>
             </ul>
           </div>
         </section>
@@ -117,8 +120,6 @@
       </div>
     </div>
   <?php } ?>
-
-</main>
 
 <?php
     require_once __DIR__ . "/../includes/footer.php";
