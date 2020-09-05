@@ -18,15 +18,16 @@ Sentry\init([
 
 // Database auto-generation
 if (file_exists("/../includes/install.php")) {
-  return;
-  add_action('run_db_populate');
+    return;
+    add_action('run_db_populate');
 }
 
-function run_db_populate() {
+function run_db_populate()
+{
     // all my glorious one-time-magic.
-    include( "/../includes/install.php" );
-   // after all execution rename your file;
-   rename( "/../includes/install.php", "/../includes/install-backup.php");
+    include("/../includes/install.php");
+    // after all execution rename your file;
+    rename("/../includes/install.php", "/../includes/install-backup.php");
 }
 
 // Session
@@ -38,8 +39,9 @@ $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // OpenID Connect
 use Jumbojett\OpenIDConnectClient;
+
 $oidc = new OpenIDConnectClient($_ENV['OIDC_HOST'], $_ENV['OIDC_CLIENT_ID'], $_ENV['OIDC_CLIENT_SECRET']);
 if ($_ENV['OIDC_DISABLE_SSL'] == "true") {
-  $oidc->setVerifyHost(false);
-  $oidc->setVerifyPeer(false);
+    $oidc->setVerifyHost(false);
+    $oidc->setVerifyPeer(false);
 }
