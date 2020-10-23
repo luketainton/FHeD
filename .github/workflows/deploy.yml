@@ -60,7 +60,7 @@ jobs:
     - name: Update image on server
       uses: garygrossgarten/github-action-ssh@release
       with:
-        command: cd /docker/active/fhed && docker-compose pull && docker-compose up -d
+        command: docker-compose -f /docker/active/fhed.yml -p fhed pull && docker-compose -f /docker/active/fhed.yml -p fhed up -d
         host: ${{ secrets.SSH_HOST }}
         port: ${{ secrets.SSH_PORT }}
         username: ${{ secrets.SSH_USERNAME }}
