@@ -1,6 +1,6 @@
 {
   "require": {
-    "ramsey/uuid": "^4.0",
+    "ramsey/uuid": "^4.1",
     "vlucas/phpdotenv": "^5.0",
     "jumbojett/openid-connect-php": "^0.9.0",
     "sentry/sdk": "^3.0"
