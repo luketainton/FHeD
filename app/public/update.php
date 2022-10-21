@@ -6,6 +6,8 @@
     $updates = get_updates($db, $request);
     $authorised_users = get_subscribers($db, $request);
     $is_authorised = isAuthorised($_SESSION['uuid'], $authorised_users, $request);
+
+    $rid = htmlspecialchars($_GET['rid'])
 ?>
 
 
@@ -131,7 +133,7 @@
                     <div class="form-group" style="margin: 2%;">
                       <textarea type="text" class="form-control" id="msg" name="msg" rows="3"></textarea>
                       <button type="submit" class="btn btn-primary" style="margin-top: 2%;">Submit</button>
-                      <a href="/view?rid=<?php echo($_GET['rid']); ?>" class="btn btn-danger" style="margin-top: 2%;">Cancel</a>
+                      <a href="/view?rid=<?php echo($rid); ?>" class="btn btn-danger" style="margin-top: 2%;">Cancel</a>
                     </div>
                   </form>
               </div>
