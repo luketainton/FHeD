@@ -5,9 +5,9 @@ build:
   stage: build
   only:
   - tags
-  image: docker:24.0.0
+  image: docker:24.0.1
   services:
-  - docker:24.0.0-dind
+  - docker:24.0.1-dind
   variables:
     IMAGE_TAG: "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
   script:
