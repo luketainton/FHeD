@@ -1,37 +1,37 @@
 name: Deploy
 on:
   push:
-    branches: main
+    branches: [main]
 
 jobs:
   tests:
-      name: Tests
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-          with:
-            fetch-depth: 0
-        - name: Setup PHP with Xdebug
-          uses: shivammathur/setup-php@v2
-          with:
-            php-version: '8.1'
-            coverage: xdebug 
-        - name: Install dependencies with composer
-          run: composer update --no-ansi --no-interaction --no-progress
-        - name: Run tests with phpunit/phpunit
-          run: vendor/bin/phpunit --coverage-clover=coverage.xml
-        - name: Fix code coverage paths
-          run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage.xml
-        - name: SonarCloud Scan
-          uses: SonarSource/sonarcloud-github-action@master
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: xdebug
+      - name: Install dependencies with composer
+        run: composer update --no-ansi --no-interaction --no-progress
+      - name: Run tests with phpunit/phpunit
+        run: vendor/bin/phpunit --coverage-clover=coverage.xml
+      - name: Fix code coverage paths
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage.xml
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   release-on-push:
     runs-on: ubuntu-latest
-    outputs: 
+    outputs:
       ver: ${{ steps.release.outputs.version }}
       tag: ${{ steps.release.outputs.tag_name }}
     env:
@@ -53,12 +53,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: [tests, release-on-push]
     steps:
-    - uses: actions/checkout@v3
-    - name: Login to GitHub Container Registry
-      run: echo ${{ secrets.PAT }} | docker login ghcr.io -u luketainton --password-stdin
-    - name: Build image for GitHub Container Registry
-      run: docker build . --file Dockerfile --tag ghcr.io/luketainton/fhed:${{ needs.release-on-push.outputs.ver }} --tag ghcr.io/luketainton/fhed:latest
-    - name: Push image to GitHub Container Registry
-      run: |
-        docker push ghcr.io/luketainton/fhed:latest
-        docker push ghcr.io/luketainton/fhed:${{ needs.release-on-push.outputs.ver }}
+      - uses: actions/checkout@v3
+      - name: Login to GitHub Container Registry
+        run: echo ${{ secrets.GHCR_ACCESS_TOKEN }} | docker login ghcr.io -u luketainton --password-stdin
+      - name: Build image for GitHub Container Registry
+        run: docker build . --file Dockerfile --tag ghcr.io/luketainton/fhed:${{ needs.release-on-push.outputs.ver }} --tag ghcr.io/luketainton/fhed:latest
+      - name: Push image to GitHub Container Registry
+        run: |
+          docker push ghcr.io/luketainton/fhed:latest
+          docker push ghcr.io/luketainton/fhed:${{ needs.release-on-push.outputs.ver }}
