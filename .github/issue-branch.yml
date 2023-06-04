@@ -1,6 +1,6 @@
 mode: auto
 silent: false
-branchName: '${issue.number}'
+branchName: "${issue.number}"
 branches:
   - label: type:feature
     prefix: feat-
